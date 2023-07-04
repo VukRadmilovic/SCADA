@@ -1,4 +1,5 @@
-﻿using BataSCADA.Models.Enumerations;
+﻿using BataSCADA.DTOs;
+using BataSCADA.Models.Enumerations;
 
 namespace BataSCADA.Models
 {
@@ -12,15 +13,20 @@ namespace BataSCADA.Models
         public double HighLimit { get; set; }
         public string Units { get; set; }
 
-        public AnalogInput()
+        public AnalogInput() {}
+
+        public AnalogInput(AnalogInputDTO tagInfo)
         {
-            Driver = DriverType.None;
-            ScanTime = 0;
-            IsOn = false;
+            TagName = tagInfo.TagName;
+            Description = tagInfo.Description;
+            Address = tagInfo.Address;
+            Driver = tagInfo.Driver;
+            ScanTime = tagInfo.ScanTime;
+            IsOn = tagInfo.IsOn;
             Alarms = new List<Alarm>();
-            LowLimit = 0;
-            HighLimit = 0;
-            Units = "";
+            LowLimit = tagInfo.LowLimit;
+            HighLimit = tagInfo.HighLimit;
+            Units = tagInfo.Units;
         }
     }
 }

@@ -1,17 +1,17 @@
 using BataSCADA.Validation;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
+builder.Services.AddControllers().AddJsonOptions(opt =>
+{
+    opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 var app = builder.Build();
-app.UseCors(corsPolicyBuilder =>
-    corsPolicyBuilder.WithOrigins("http://localhost:4200")
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -25,6 +25,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseCors(corsPolicyBuilder =>
+    corsPolicyBuilder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+);
 
 app.UseAuthorization();
 

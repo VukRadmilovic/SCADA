@@ -17,5 +17,19 @@ namespace BataSCADA.Repositories
             using var dbContext = new DatabaseContext();
             return dbContext.Users.Any(user => user.Username == username) ? dbContext.Users.FirstOrDefault(user => user.Username == username) : null;
         }
+
+        public static void Login(User user)
+        {
+            using var dbContext = new DatabaseContext();
+            user.IsLoggedIn = true;
+            dbContext.SaveChanges();
+        }
+
+        public static void Logout(User user)
+        {
+            using var dbContext = new DatabaseContext();
+            user.IsLoggedIn = false;
+            dbContext.SaveChanges();
+        }
     }
 }

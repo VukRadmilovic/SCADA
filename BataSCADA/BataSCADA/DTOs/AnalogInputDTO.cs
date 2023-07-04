@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using BataSCADA.Models.Enumerations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace BataSCADA.DTOs
 {
@@ -13,7 +15,8 @@ namespace BataSCADA.DTOs
         [Range(0, int.MaxValue, ErrorMessage = "Address has to be a value of 0 or more!")]
         public int Address { get; set; }
         [Required(ErrorMessage = "Driver is a required field!")]
-        public DriveType Driver { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public DriverType Driver { get; set; }
         [Required(ErrorMessage = "ScanTime is a required field!")]
         [Range(0, int.MaxValue, ErrorMessage = "ScanTime has to be a value of 0 or more!")]
         public int ScanTime { get; set; }

@@ -1,5 +1,4 @@
 ﻿using BataSCADA.DTOs;
-using BataSCADA.Models;
 using BataSCADA.Services;
 using BataSCADA.Validation;
 using Microsoft.AspNetCore.Mvc;
