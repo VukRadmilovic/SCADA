@@ -22,6 +22,8 @@ namespace BataSCADA.Repositories
         {
             using var dbContext = new DatabaseContext();
             user.IsLoggedIn = true;
+            dbContext.Users.Attach(user);
+            dbContext.Entry(user).Property(x => x.IsLoggedIn).IsModified = true;
             dbContext.SaveChanges();
         }
 
@@ -29,6 +31,8 @@ namespace BataSCADA.Repositories
         {
             using var dbContext = new DatabaseContext();
             user.IsLoggedIn = false;
+            dbContext.Users.Attach(user);
+            dbContext.Entry(user).Property(x => x.IsLoggedIn).IsModified = true;
             dbContext.SaveChanges();
         }
     }
