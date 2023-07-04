@@ -1,14 +1,15 @@
-﻿using BataSCADA.Validation;
+﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BataSCADA.Controllers
 {
     [Route("tags")]
+    [EnableCors]
     public class TagController : Controller
     {
-        [HttpPost("add")]
+        [HttpPost("addInput")]
         
-        public IActionResult AddTag()
+        public IActionResult AddInputTag()
         {
             return Ok();
         }

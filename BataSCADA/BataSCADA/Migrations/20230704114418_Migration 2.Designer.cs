@@ -3,6 +3,7 @@ using BataSCADA.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BataSCADA.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230704114418_Migration 2")]
+    partial class Migration2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,32 +102,6 @@ namespace BataSCADA.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("BataSCADA.Models.AnalogInput", b =>
-                {
-                    b.HasBaseType("BataSCADA.Models.Tag");
-
-                    b.Property<int>("Driver")
-                        .HasColumnType("int");
-
-                    b.Property<double>("HighLimit")
-                        .HasColumnType("float");
-
-                    b.Property<bool>("IsOn")
-                        .HasColumnType("bit");
-
-                    b.Property<double>("LowLimit")
-                        .HasColumnType("float");
-
-                    b.Property<int>("ScanTime")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Units")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable("AnalogInputs", (string)null);
-                });
-
             modelBuilder.Entity("BataSCADA.Models.AnalogOutput", b =>
                 {
                     b.HasBaseType("BataSCADA.Models.Tag");
@@ -171,20 +148,28 @@ namespace BataSCADA.Migrations
                     b.ToTable("DigitalOutputs", (string)null);
                 });
 
+            modelBuilder.Entity("BataSCADA.Models.AnalogInput", b =>
+                {
+                    b.HasBaseType("BataSCADA.Models.DigitalInput");
+
+                    b.Property<double>("HighLimit")
+                        .HasColumnType("float");
+
+                    b.Property<double>("LowLimit")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Units")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("AnalogInputs", (string)null);
+                });
+
             modelBuilder.Entity("BataSCADA.Models.Alarm", b =>
                 {
                     b.HasOne("BataSCADA.Models.AnalogInput", null)
                         .WithMany("Alarms")
                         .HasForeignKey("AnalogInputTagName");
-                });
-
-            modelBuilder.Entity("BataSCADA.Models.AnalogInput", b =>
-                {
-                    b.HasOne("BataSCADA.Models.Tag", null)
-                        .WithOne()
-                        .HasForeignKey("BataSCADA.Models.AnalogInput", "TagName")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("BataSCADA.Models.AnalogOutput", b =>
@@ -210,6 +195,15 @@ namespace BataSCADA.Migrations
                     b.HasOne("BataSCADA.Models.Tag", null)
                         .WithOne()
                         .HasForeignKey("BataSCADA.Models.DigitalOutput", "TagName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BataSCADA.Models.AnalogInput", b =>
+                {
+                    b.HasOne("BataSCADA.Models.DigitalInput", null)
+                        .WithOne()
+                        .HasForeignKey("BataSCADA.Models.AnalogInput", "TagName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

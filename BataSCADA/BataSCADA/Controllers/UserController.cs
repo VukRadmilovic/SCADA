@@ -43,13 +43,16 @@ namespace BataSCADA.Controllers
         [HttpPost("register")]
         public IActionResult Register(UserDTO userInfo)
         {
-            if (UserService.GetByUsername(userInfo.Username) != null)
+            try
             {
-                return BadRequest(new GlobalError(400,"Username","Username already in use!"));
+                UserService.Register(userInfo);
+                return Ok("User successfully registered!");
             }
-            var user = new User(userInfo);
-            UserService.Save(user);
-            return Ok("User successfully registered!");
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new GlobalError(400, "Credentials", ex.Message));
+            }
+            
         }
     }   
 }

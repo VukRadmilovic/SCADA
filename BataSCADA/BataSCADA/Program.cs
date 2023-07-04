@@ -7,6 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 var app = builder.Build();
+app.UseCors(corsPolicyBuilder =>
+    corsPolicyBuilder.WithOrigins("http://localhost:4200")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
