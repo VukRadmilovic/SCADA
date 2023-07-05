@@ -53,5 +53,11 @@ namespace BataSCADA.Controllers
             }
             
         }
+
+        [HttpGet("all")]
+        public IActionResult GetAll()
+        {
+            return Ok(UserService.GetAllUsers());
+        }
     }   
 }

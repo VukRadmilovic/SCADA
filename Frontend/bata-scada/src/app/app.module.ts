@@ -26,6 +26,7 @@ import { DbManagerComponent } from './components/db-manager/db-manager.component
 import { NavigationComponent } from './components/navigation/navigation.component';
 import {MatGridListModule} from "@angular/material/grid-list";
 import { InputTagsComponent } from './components/input-tags/input-tags.component';
+import { RegistrationComponent } from './components/registration/registration.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { InputTagsComponent } from './components/input-tags/input-tags.component
     LoginComponent,
     DbManagerComponent,
     NavigationComponent,
-    InputTagsComponent
+    InputTagsComponent,
+    RegistrationComponent
   ],
     imports: [
         BrowserModule,

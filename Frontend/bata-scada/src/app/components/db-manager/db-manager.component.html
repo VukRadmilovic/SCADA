@@ -20,10 +20,11 @@
               </mat-card-content>
           </div>
           <div class="flex-column width-30 padding">
-            <mat-form-field class="height-65" *ngIf="tag.type=='Analog'">
+            <mat-form-field style="height: 5.4em"  *ngIf="tag.type=='Analog'">
               <mat-label>Value</mat-label>
               <input matInput type="text" value="{{tag.value}}" id="{{tag.tagName}}" (input)="modifiedValue($event)">
             </mat-form-field>
+
             <mat-checkbox
               [checked]="outputTagValues[i]"
               class="mat-h1 center-horizontal" id="{{tag.tagName}}" *ngIf="tag.type == 'Digital'">Opened</mat-checkbox>

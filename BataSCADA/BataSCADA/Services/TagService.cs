@@ -11,6 +11,8 @@ namespace BataSCADA.Services
         {
             if (TagRepository.GetTagByTagName(tagInfo.TagName) != null)
                 throw new ArgumentException("TagName already in use!");
+            if(TagRepository.GetTagByAddress(tagInfo.Address) != null)
+                throw new ArgumentException("Address already in use!");
             var tag = new AnalogInput(tagInfo);
             TagRepository.SaveAnalogInput(tag);
         }
@@ -19,6 +21,8 @@ namespace BataSCADA.Services
         {
             if (TagRepository.GetTagByTagName(tagInfo.TagName) != null)
                 throw new ArgumentException("TagName already in use!");
+            if (TagRepository.GetTagByAddress(tagInfo.Address) != null)
+                throw new ArgumentException("Address already in use!");
             tagInfo.Value = tagInfo.InitialValue;
             TagRepository.SaveAnalogOutput(tagInfo);
         }
@@ -27,6 +31,8 @@ namespace BataSCADA.Services
         {
             if (TagRepository.GetTagByTagName(tagInfo.TagName) != null)
                 throw new ArgumentException("TagName already in use!");
+            if (TagRepository.GetTagByAddress(tagInfo.Address) != null)
+                throw new ArgumentException("Address already in use!");
             tagInfo.Value = tagInfo.InitialValue;
             TagRepository.SaveDigitalOutput(tagInfo);
         }
@@ -35,6 +41,8 @@ namespace BataSCADA.Services
         {
             if (TagRepository.GetTagByTagName(tagInfo.TagName) != null)
                 throw new ArgumentException("TagName already in use!");
+            if (TagRepository.GetTagByAddress(tagInfo.Address) != null)
+                throw new ArgumentException("Address already in use!");
             TagRepository.SaveDigitalInput(tagInfo);
         }
 

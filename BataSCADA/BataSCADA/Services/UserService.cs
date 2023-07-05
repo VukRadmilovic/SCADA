@@ -36,5 +36,16 @@ namespace BataSCADA.Services
                 throw new ArgumentException("Username does not exist!");
             return user.IsLoggedIn;
         }
+
+        public static List<UserDTO> GetAllUsers()
+        {
+            List<User> users = UserRepository.GetAll();
+            List<UserDTO> usersDtos = new List<UserDTO>();
+            foreach (var user in users)
+            {
+                usersDtos.Add(new UserDTO(user));
+            }
+            return usersDtos;
+        }
     }
 }

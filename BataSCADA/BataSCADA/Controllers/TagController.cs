@@ -24,7 +24,7 @@ namespace BataSCADA.Controllers
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(new GlobalError(400, "TagName", ex.Message));
+                return BadRequest(new GlobalError(400, "Tag", ex.Message));
             }
         }
 
@@ -38,7 +38,7 @@ namespace BataSCADA.Controllers
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(new GlobalError(400, "TagName", ex.Message));
+                return BadRequest(new GlobalError(400, "Tag", ex.Message));
             }
         }
 
@@ -52,7 +52,7 @@ namespace BataSCADA.Controllers
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(new GlobalError(400, "TagName", ex.Message));
+                return BadRequest(new GlobalError(400, "Tag", ex.Message));
             }
         }
 
@@ -66,7 +66,7 @@ namespace BataSCADA.Controllers
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(new GlobalError(400, "TagName", ex.Message));
+                return BadRequest(new GlobalError(400, "Tag", ex.Message));
             }
         }
 

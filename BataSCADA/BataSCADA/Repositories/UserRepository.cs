@@ -35,5 +35,11 @@ namespace BataSCADA.Repositories
             dbContext.Entry(user).Property(x => x.IsLoggedIn).IsModified = true;
             dbContext.SaveChanges();
         }
+
+        public static List<User> GetAll()
+        {
+            using var dbContext = new DatabaseContext();
+            return dbContext.Users.ToList();
+        }
     }
 }

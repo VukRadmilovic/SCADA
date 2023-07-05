@@ -48,6 +48,12 @@ namespace BataSCADA.Repositories
             return dbContext.Tags.Any(tag => tag.TagName == tagName) ? dbContext.Tags.FirstOrDefault(tag => tag.TagName == tagName) : null;
         }
 
+        public static Tag? GetTagByAddress(int address)
+        {
+            using var dbContext = new DatabaseContext();
+            return dbContext.Tags.Any(tag => tag.Address == address) ? dbContext.Tags.FirstOrDefault(tag => tag.Address == address) : null;
+        }
+
         public static void TurnOnScan(string tagName)
         {
             Tag tag = GetTagByTagName(tagName);
