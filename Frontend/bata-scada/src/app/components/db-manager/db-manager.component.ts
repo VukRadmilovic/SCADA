@@ -9,6 +9,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {DigitalOutput} from "../../models/DigitalOutput";
 import {AnalogOutput} from "../../models/AnalogOutput";
 import {ValueDTO} from "../../models/ValueDTO";
+import {NotificationsService} from "../../services/notifications.service";
 
 @Component({
   selector: 'app-db-manager',
@@ -25,6 +26,7 @@ export class DbManagerComponent implements OnInit{
   showForm = false;
   modifiedValues : any = {};
   constructor(private tagService: TagService,
+              private notificationService : NotificationsService,
               private formBuilder: FormBuilder,) {}
   ngOnInit() {
     this.tagCreationForm = this.formBuilder.group({
@@ -50,13 +52,15 @@ export class DbManagerComponent implements OnInit{
           else {
             this.outputTagValues.push(false);
             this.modifiedValues[result.tagName] = (<string>(<unknown>result.value)).toString();
-            console.log(typeof  this.modifiedValues[result.tagName])
           }
         }
           this.outputTags = results;
       },
       error : (err) => {
         console.log(err);
+        for (let key in err.error.errors) {
+          this.notificationService.createNotification(err.error.errors[key]);
+        }
     }
     })
   }
@@ -89,11 +93,13 @@ export class DbManagerComponent implements OnInit{
           }
           this.tagService.addDigitalOutputTag(digitalOutput).subscribe({
             next : (result) => {
-              console.log(result);
               window.location.reload();
             },
             error : (err) => {
               console.log(err);
+              for (let key in err.error.errors) {
+                this.notificationService.createNotification(err.error.errors[key]);
+              }
             }
           })
         }
@@ -109,11 +115,13 @@ export class DbManagerComponent implements OnInit{
           }
           this.tagService.addAnalogOutputTag(analogOutput).subscribe({
             next : (result) => {
-              console.log(result);
               window.location.reload();
             },
             error : (err) => {
               console.log(err);
+              for (let key in err.error.errors) {
+                this.notificationService.createNotification(err.error.errors[key]);
+              }
             }
           })
         }
@@ -124,6 +132,10 @@ export class DbManagerComponent implements OnInit{
     this.showForm = true;
   }
 
+  public hideForm() : void {
+    this.showForm = false;
+  }
+
   public delete(event : any) : void {
     const tagName = ((event.target as Element).parentElement as Element).id;
     this.tagService.deleteTag(tagName).subscribe( {
@@ -132,6 +144,9 @@ export class DbManagerComponent implements OnInit{
       },
       error : (err) => {
         console.log(err);
+        for (let key in err.error.errors) {
+          this.notificationService.createNotification(err.error.errors[key]);
+        }
       }
     })
   }
@@ -163,7 +178,6 @@ export class DbManagerComponent implements OnInit{
         }
         else {
           valueDTO.value = this.modifiedValues[tagName];
-          console.log(valueDTO)
         }
         this.tagService.changeOutputTagValue(tagName,valueDTO).subscribe( {
           next : () => {
@@ -171,6 +185,9 @@ export class DbManagerComponent implements OnInit{
           },
           error : (err) => {
             console.log(err);
+            for (let key in err.error.errors) {
+              this.notificationService.createNotification(err.error.errors[key]);
+            }
           }
         })
       }

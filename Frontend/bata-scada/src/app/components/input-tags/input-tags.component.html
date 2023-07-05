@@ -2,31 +2,32 @@
 <app-navigation></app-navigation>
 <br>
 <br>
-<h1 class="mat-headline-3 center-horizontal">Output tags</h1>
+<h1 class="mat-headline-3 center-horizontal">Input tags</h1>
 <mat-grid-list cols="3" rowHeight="8:4" class="width-100 height-50 overflow-scroll-y">
-  <mat-grid-tile *ngFor="let tag of outputTags;let i=index">
+  <mat-grid-tile *ngFor="let tag of inputTags;let i=index">
     <div class="padding width-100">
       <mat-card>
         <div class="flex-row width-100">
           <div class="width-70 center-left">
-              <mat-card-header>
-                <mat-card-title>{{tag.tagName}}</mat-card-title>
-                <mat-card-subtitle>Initial Value: {{tag.initialValue}}</mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                <p *ngIf="tag.type == 'Analog'">{{tag.lowLimit}} - {{tag.highLimit}} <b>[{{tag.units}}]</b></p>
-                <p *ngIf="tag.type == 'Digital'">----------</p>
-                <p>{{tag.description}}</p>
-              </mat-card-content>
+            <mat-card-header>
+              <mat-card-title>{{tag.tagName}}</mat-card-title>
+              <mat-card-subtitle>Driver: {{tag.driver}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p *ngIf="tag.type == 'Analog'">{{tag.lowLimit}} - {{tag.highLimit}} <b>[{{tag.units}}]</b></p>
+              <p *ngIf="tag.type == 'Digital'">----------</p>
+              <p>{{tag.description}}</p>
+            </mat-card-content>
           </div>
           <div class="flex-column width-30 padding">
-            <mat-form-field class="height-65" *ngIf="tag.type=='Analog'">
-              <mat-label>Value</mat-label>
-              <input matInput type="text" value="{{tag.value}}" id="{{tag.tagName}}" (input)="modifiedValue($event)">
-            </mat-form-field>
-            <mat-checkbox
-              [checked]="outputTagValues[i]"
-              class="mat-h1 center-horizontal" id="{{tag.tagName}}" *ngIf="tag.type == 'Digital'">Opened</mat-checkbox>
+            <div class="width-100">
+              <div class="center-horizontal flex-row">
+                <h4 class="center-vertical">Scanning:</h4>
+                <mat-checkbox class="center-vertical width-exact" id="{{tag.tagName}}" style="text-align: left" [checked]="tag.isOn"></mat-checkbox>
+              </div>
+              <br>
+              <br>
+            </div>
             <button mat-raised-button color="primary" id="{{tag.tagName}}" class="width-70 center-horizontal" (click)="changeValue($event)">Change</button>
           </div>
         </div>
@@ -37,12 +38,12 @@
     </div>
   </mat-grid-tile>
 </mat-grid-list>
-<button mat-raised-button class="stick-to-bottom center-horizontal" color="accent" (click)="showAddForm()">Add output tag</button>
+<button mat-raised-button class="stick-to-bottom center-horizontal" color="accent" (click)="showAddForm()">Add input tag</button>
 <div class="overlay width-100 height-100 z-index-higher" *ngIf="showForm">
-  <form [formGroup]="tagCreationForm" style="top:15%;position: relative">
-  <div class="width-50 height-70 card center-horizontal padding">
-    <div class="flex-row">
-      <div class="height-100 width-50">
+  <form [formGroup]="tagCreationForm" style="top:15%;position: relative" class="center-horizontal">
+    <div class="width-50 height-80 card center-horizontal padding">
+      <div class="flex-row">
+        <div class="height-100 width-50">
           <mat-form-field class="width-70">
             <mat-label>Tag Type</mat-label>
             <mat-select (selectionChange)="typeChanged($event.value)" formControlName="tagType">
@@ -60,12 +61,12 @@
             </mat-error>
           </mat-form-field>
           <mat-form-field class="width-70">
-            <mat-label>Address</mat-label>
-            <mat-select formControlName="address">
-              <mat-option *ngFor="let address of addresses" [value]="address">{{address}}</mat-option>
+            <mat-label>Driver</mat-label>
+            <mat-select (selectionChange)="driverChanged($event.value)" formControlName="driver">
+              <mat-option *ngFor="let driver of drivers" [value]="driver">{{driver}}</mat-option>
             </mat-select>
-            <mat-error *ngIf="tagCreationForm.controls['address'].hasError('required')">
-              Address is <strong>required</strong>
+            <mat-error *ngIf="tagCreationForm.controls['driver'].hasError('required')">
+              Driver is <strong>required</strong>
             </mat-error>
           </mat-form-field>
           <mat-form-field class="width-70">
@@ -77,21 +78,15 @@
           </mat-form-field>
         </div>
         <div class="height-100 width-50">
-          <mat-form-field class="width-70" *ngIf="!isDigitalChosen">
-            <mat-label>Initial Value</mat-label>
-            <input matInput formControlName="initialValueNum">
-            <mat-error *ngIf="tagCreationForm.controls['initialValueNum'].hasError('required')">
-              Initial Value is <strong>required</strong>
+          <mat-form-field class="width-70">
+            <mat-label>Address</mat-label>
+            <mat-select formControlName="address">
+              <mat-option *ngFor="let address of addresses" [value]="address">{{address}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="tagCreationForm.controls['address'].hasError('required')">
+              Address is <strong>required</strong>
             </mat-error>
           </mat-form-field>
-          <div class="width-100" *ngIf="isDigitalChosen">
-            <div class="center-horizontal flex-row">
-            <h4 class="center-vertical">Initial Value:</h4>
-            <mat-checkbox class="center-vertical width-exact" formControlName="initialValueBool" style="text-align: left" *ngIf="isDigitalChosen">Opened</mat-checkbox>
-            </div>
-            <br>
-            <br>
-          </div>
           <mat-form-field class="width-70">
             <mat-label>Low Limit</mat-label>
             <input matInput [disabled]="isDigitalChosen" formControlName="lowLimit">
@@ -115,11 +110,20 @@
           </mat-form-field>
         </div>
       </div>
+      <mat-form-field class="center-horizontal width-40">
+        <mat-label>Scan Time</mat-label>
+        <input matInput formControlName="scanTime">
+        <span matSuffix style="margin-right: 10px">ms</span>
+        <mat-error *ngIf="tagCreationForm.controls['scanTime'].hasError('required')">
+          Scan Time is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
       <br>
-      <button mat-raised-button color="accent" type="submit"
-              style="margin-right: 20px" class="center-horizontal" (click)="add()">Add new output tag</button>
-    <button mat-raised-button color="accent" type="button" class="center-horizontal" (click)="hideForm()">Close</button>
-  </div>
+      <br>
+      <button mat-raised-button style="margin-right: 20px" color="accent" type="submit" class="center-horizontal" (click)="add()">Add new input tag</button>
+      <button mat-raised-button color="accent" type="button" class="center-horizontal" (click)="hideForm()">Close</button>
+    </div>
   </form>
 </div>
 </body>
+

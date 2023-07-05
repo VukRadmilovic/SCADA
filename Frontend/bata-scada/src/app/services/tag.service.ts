@@ -9,6 +9,8 @@ import {SuccessMessage} from "../models/SuccessMessage";
 import {DigitalOutput} from "../models/DigitalOutput";
 import {AnalogOutput} from "../models/AnalogOutput";
 import {ValueDTO} from "../models/ValueDTO";
+import {DigitalInput} from "../models/DigitalInput";
+import {AnalogInputDTO} from "../models/AnalogInputDTO";
 
 @Injectable({
   providedIn: 'root'
@@ -34,11 +36,27 @@ export class TagService {
     return this.http.post<GlobalError | SuccessMessage>(this.prefix + "add-analog-output",tag);
   }
 
+  public addDigitalInputTag(tag : DigitalInput) : Observable<GlobalError | SuccessMessage> {
+    return this.http.post<GlobalError | SuccessMessage>(this.prefix + "add-digital-input",tag);
+  }
+
+  public addAnalogInputTag(tag : AnalogInputDTO) : Observable<GlobalError | SuccessMessage> {
+    return this.http.post<GlobalError | SuccessMessage>(this.prefix + "add-analog-input",tag);
+  }
+
   public deleteTag(tagName : string) : Observable<GlobalError | SuccessMessage> {
-    return this.http.delete<GlobalError | SuccessMessage>(this.prefix + "delete" + tagName);
+    return this.http.delete<GlobalError | SuccessMessage>(this.prefix + "delete/" + tagName);
   }
 
   public changeOutputTagValue(tagName: string, value : ValueDTO) : Observable<GlobalError | SuccessMessage> {
     return this.http.put<GlobalError | SuccessMessage>(this.prefix + "output-tag-value-change/" + tagName,value);
+  }
+
+  public turnOnScan( tagName : string) : Observable<GlobalError | SuccessMessage> {
+    return this.http.put<GlobalError | SuccessMessage>(this.prefix + "turn-on-scan/" + tagName,null);
+  }
+
+  public turnOffScan( tagName : string) : Observable<GlobalError | SuccessMessage> {
+    return this.http.put<GlobalError | SuccessMessage>(this.prefix + "turn-off-scan/" + tagName,null);
   }
 }

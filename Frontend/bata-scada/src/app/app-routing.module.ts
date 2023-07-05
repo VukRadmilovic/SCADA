@@ -2,10 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {LoginComponent} from "./components/login/login.component";
 import {DbManagerComponent} from "./components/db-manager/db-manager.component";
+import {InputTagsComponent} from "./components/input-tags/input-tags.component";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'dbManager', component : DbManagerComponent},
+  {path: 'dbManagerInput', component: InputTagsComponent},
   {path: '', redirectTo:'/login', pathMatch: 'full'},
 ];
 

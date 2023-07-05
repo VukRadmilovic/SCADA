@@ -25,13 +25,15 @@ import {InterceptorService} from "./services/interceptor.service";
 import { DbManagerComponent } from './components/db-manager/db-manager.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import {MatGridListModule} from "@angular/material/grid-list";
+import { InputTagsComponent } from './components/input-tags/input-tags.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DbManagerComponent,
-    NavigationComponent
+    NavigationComponent,
+    InputTagsComponent
   ],
     imports: [
         BrowserModule,
