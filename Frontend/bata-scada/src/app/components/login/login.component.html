@@ -1,0 +1,43 @@
+<body>
+<div class = "header">
+  <div class= "center-vertical white-text">Bata SCADA</div>
+</div>
+<br>
+<br>
+<br>
+<div class="width-50 center-horizontal border height-90">
+  <mat-tab-group>
+    <mat-tab label="Login">
+      <div class="padding flex-column">
+        <br>
+        <div class="mat-headline-3" style="margin-bottom: 30px;">Login</div>
+        <br>
+        <form [formGroup]="loginForm" class="flex-column center-horizontal width-50">
+          <mat-form-field>
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username">
+            <mat-error *ngIf="loginForm.controls['username'].hasError('required')">
+              Email is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+          <br>
+          <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" type="password">
+            <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
+              Password is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+          <br>
+          <br>
+          <div class="flex-row width-40 center-horizontal">
+            <button mat-raised-button color="primary" class="width-exact center-horizontal" (click)="login()">Login</button>
+          </div>
+          <br>
+        </form>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+</body>
+

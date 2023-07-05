@@ -95,5 +95,39 @@ namespace BataSCADA.Repositories
             }
 
         }
+
+        public static List<Tag> GetAllOutputTags()
+        {
+            List<Tag> tags = new();
+            using var dbContext = new DatabaseContext();
+            tags.AddRange(dbContext.DigitalOutputs);
+            tags.AddRange(dbContext.AnalogOutputs);
+            return tags;
+        }
+
+        public static List<Tag> GetAllInputTags()
+        {
+            List<Tag> tags = new();
+            using var dbContext = new DatabaseContext();
+            tags.AddRange(dbContext.DigitalInputs);
+            tags.AddRange(dbContext.AnalogInputs);
+            return tags;
+        }
+
+        public static void ChangeDigitalOutputValue(DigitalOutput tag)
+        {
+            using var dbContext = new DatabaseContext();
+            dbContext.DigitalOutputs.Attach(tag);
+            dbContext.Entry(tag).Property(x => x.Value).IsModified = true;
+            dbContext.SaveChanges();
+        }
+
+        public static void ChangeAnalogOutputValue(AnalogOutput tag)
+        {
+            using var dbContext = new DatabaseContext();
+            dbContext.AnalogOutputs.Attach(tag);
+            dbContext.Entry(tag).Property(x => x.Value).IsModified = true;
+            dbContext.SaveChanges();
+        }
     }
 }

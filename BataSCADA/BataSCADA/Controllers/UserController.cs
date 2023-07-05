@@ -15,7 +15,7 @@ namespace BataSCADA.Controllers
             try
             {
                 UserService.Login(userCredentials);
-                return Ok("User successfully logged in!");
+                return Ok(new SuccessMessageDTO("User successfully logged in!"));
             }
             catch (ArgumentException ex)
             {
@@ -30,7 +30,7 @@ namespace BataSCADA.Controllers
             try
             {
                 UserService.Logout(username);
-                return Ok("User successfully logged out!");
+                return Ok(new SuccessMessageDTO("User successfully logged out!"));
             }
             catch (ArgumentException ex)
             {
@@ -45,7 +45,7 @@ namespace BataSCADA.Controllers
             try
             {
                 UserService.Register(userInfo);
-                return Ok("User successfully registered!");
+                return Ok(new SuccessMessageDTO("User successfully registered!"));
             }
             catch (ArgumentException ex)
             {

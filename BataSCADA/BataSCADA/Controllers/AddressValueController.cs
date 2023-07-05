@@ -17,7 +17,7 @@ namespace BataSCADA.Controllers
             try
             {
                 AddressValueService.AddAddressValue(value);
-                return Ok("Address value successfully added!");
+                return Ok(new SuccessMessageDTO("Address value successfully added!"));
             }
             catch (ArgumentException ex)
             {

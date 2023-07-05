@@ -4,6 +4,8 @@ using BataSCADA.Services;
 using BataSCADA.Validation;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System.Web;
+using System;
 
 namespace BataSCADA.Controllers
 {
@@ -18,7 +20,7 @@ namespace BataSCADA.Controllers
             try
             {
                 TagService.AddAnalogInput(tagInfo);
-                return Ok("Analog input tag successfully added!");
+                return Ok(new SuccessMessageDTO("Analog input tag successfully added!"));
             }
             catch (ArgumentException ex)
             {
@@ -32,7 +34,7 @@ namespace BataSCADA.Controllers
             try
             {
                 TagService.AddAnalogOutput(tagInfo);
-                return Ok("Analog output tag successfully added!");
+                return Ok(new SuccessMessageDTO("Analog output tag successfully added!"));
             }
             catch (ArgumentException ex)
             {
@@ -46,7 +48,7 @@ namespace BataSCADA.Controllers
             try
             {
                 TagService.AddDigitalOutput(tagInfo);
-                return Ok("Digital output tag successfully added!");
+                return Ok(new SuccessMessageDTO("Digital output tag successfully added!"));
             }
             catch (ArgumentException ex)
             {
@@ -60,7 +62,7 @@ namespace BataSCADA.Controllers
             try
             {
                 TagService.AddDigitalInput(tagInfo);
-                return Ok("Digital input tag successfully added!");
+                return Ok(new SuccessMessageDTO("Digital input tag successfully added!"));
             }
             catch (ArgumentException ex)
             {
@@ -74,7 +76,7 @@ namespace BataSCADA.Controllers
             try
             {
                 TagService.DeleteTag(tagName);
-                return Ok("Tag successfully deleted!");
+                return Ok(new SuccessMessageDTO("Tag successfully deleted!"));
             }
             catch (ArgumentException ex)
             {
@@ -88,7 +90,7 @@ namespace BataSCADA.Controllers
             try
             {
                 TagService.TurnOnTag(tagName);
-                return Ok("Tag scan successfully turned on!");
+                return Ok(new SuccessMessageDTO("Tag scan successfully turned on!"));
             }
             catch (ArgumentException ex)
             {
@@ -102,7 +104,34 @@ namespace BataSCADA.Controllers
             try
             {
                 TagService.TurnOffTag(tagName);
-                return Ok("Tag scan successfully turned off!");
+                return Ok(new SuccessMessageDTO("Tag scan successfully turned off!"));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new GlobalError(400, "Tag", ex.Message));
+            }
+        }
+
+        [HttpGet("output-tags")]
+        public IActionResult GetAllOutputTags()
+        {
+            return Ok(TagService.GetAllOutputTags());
+        }
+
+        [HttpGet("input-tags")]
+        public IActionResult GetAllInputTags()
+        {
+            return Ok(TagService.GetAllInputTags());
+        }
+
+        [HttpPut("output-tag-value-change/{tagName}")]
+        public IActionResult ChangeOutputTagValue(string tagName, [FromBody] ValueDTO value)
+        {
+            try
+            {
+                tagName = HttpUtility.UrlDecode(tagName);
+                TagService.ChangeOutputTagValue(tagName, value.Value);
+                return Ok(new SuccessMessageDTO("Output tag value successfully changed!"));
             }
             catch (ArgumentException ex)
             {

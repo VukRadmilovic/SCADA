@@ -1,6 +1,7 @@
 ﻿using BataSCADA.DTOs;
 using BataSCADA.Models;
 using BataSCADA.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace BataSCADA.Services
 {
@@ -18,6 +19,7 @@ namespace BataSCADA.Services
         {
             if (TagRepository.GetTagByTagName(tagInfo.TagName) != null)
                 throw new ArgumentException("TagName already in use!");
+            tagInfo.Value = tagInfo.InitialValue;
             TagRepository.SaveAnalogOutput(tagInfo);
         }
 
@@ -25,6 +27,7 @@ namespace BataSCADA.Services
         {
             if (TagRepository.GetTagByTagName(tagInfo.TagName) != null)
                 throw new ArgumentException("TagName already in use!");
+            tagInfo.Value = tagInfo.InitialValue;
             TagRepository.SaveDigitalOutput(tagInfo);
         }
 
@@ -54,12 +57,61 @@ namespace BataSCADA.Services
 
         public static void TurnOffTag(string tagName)
         {
-            Tag? tag = TagRepository.GetTagByTagName(tagName);
+            var tag = TagRepository.GetTagByTagName(tagName);
             if (tag == null)
                 throw new ArgumentException("Tag with the specified name does not exist!");
             if (tag is DigitalOutput || tag is AnalogOutput)
                 throw new ArgumentException("Tag is not an input tag!");
             TagRepository.TurnOffScan(tagName);
+        }
+
+        public static List<OutputTagDTO> GetAllOutputTags()
+        {
+            var outputTags = TagRepository.GetAllOutputTags();
+            List<OutputTagDTO> outputTagDtos = new();
+            foreach (var tag in outputTags)
+            {
+                outputTagDtos.Add(tag is DigitalOutput
+                    ? new OutputTagDTO((DigitalOutput)tag)
+                    : new OutputTagDTO((AnalogOutput)tag));
+            }
+            return outputTagDtos;
+        }
+
+        public static List<InputTagDTO> GetAllInputTags()
+        {
+            var inputTags = TagRepository.GetAllInputTags();
+            List<InputTagDTO> inputTagDtos = new();
+            foreach (var tag in inputTags)
+            {
+                inputTagDtos.Add(tag is DigitalInput
+                    ? new InputTagDTO((DigitalInput)tag)
+                    : new InputTagDTO((AnalogInput)tag));
+            }
+            return inputTagDtos;
+        }
+
+
+        public static void ChangeOutputTagValue(string tagName,double value)
+        {
+            var tag = TagRepository.GetTagByTagName(tagName);
+            if (tag == null)
+                throw new ArgumentException("Tag with the specified name does not exist!");
+            if (tag is DigitalInput || tag is AnalogInput)
+                throw new ArgumentException("Tag is not an output tag!");
+            if (tag is AnalogOutput)
+            {
+                AnalogOutput analogTag = (AnalogOutput)tag;
+                analogTag.Value = value;
+                TagRepository.ChangeAnalogOutputValue(analogTag);
+            }
+
+            if (tag is DigitalOutput)
+            {
+                DigitalOutput digitalTag = (DigitalOutput)tag;
+                digitalTag.Value = value == 0 ? false : true;
+                TagRepository.ChangeDigitalOutputValue(digitalTag);
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ namespace BataSCADA.Models
     {
         [Required(ErrorMessage = "InitialValue is a required field!")]
         public bool InitialValue { get; set; }
+        public bool Value { get; set; }
 
         public DigitalOutput() {}
 

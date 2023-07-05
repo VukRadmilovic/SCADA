@@ -12,6 +12,7 @@ namespace BataSCADA.Models
         public double HighLimit { get; set; }
         [Required(ErrorMessage = "Units is a required field!")]
         public string Units { get; set; }
+        public double Value { get; set; }
 
         public AnalogOutput() { }
     }
