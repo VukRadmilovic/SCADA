@@ -1,6 +1,8 @@
 using BataSCADA.Validation;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
+using BataSCADA.Authorization;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +32,7 @@ app.UseCors(corsPolicyBuilder =>
         .AllowAnyMethod()
         .AllowAnyHeader()
 );
-
+app.UseMiddleware<Authorization>();
 app.UseAuthorization();
 
 app.MapControllerRoute(

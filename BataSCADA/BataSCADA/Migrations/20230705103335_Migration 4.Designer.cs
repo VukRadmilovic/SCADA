@@ -4,6 +4,7 @@ using BataSCADA.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BataSCADA.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230705103335_Migration 4")]
+    partial class Migration4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,31 +24,6 @@ namespace BataSCADA.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("BataSCADA.Models.AddressValue", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Address")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Value")
-                        .HasColumnType("float");
-
-                    b.Property<int>("ValueType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AddressValues");
-                });
 
             modelBuilder.Entity("BataSCADA.Models.Alarm", b =>
                 {
@@ -91,6 +69,30 @@ namespace BataSCADA.Migrations
                     b.ToTable("Tags", (string)null);
 
                     b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("BataSCADA.Models.TagValue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("TagName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Value")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TagName");
+
+                    b.ToTable("TagValues");
                 });
 
             modelBuilder.Entity("BataSCADA.Models.User", b =>
@@ -202,6 +204,15 @@ namespace BataSCADA.Migrations
                     b.HasOne("BataSCADA.Models.AnalogInput", null)
                         .WithMany("Alarms")
                         .HasForeignKey("AnalogInputTagName");
+                });
+
+            modelBuilder.Entity("BataSCADA.Models.TagValue", b =>
+                {
+                    b.HasOne("BataSCADA.Models.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagName");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("BataSCADA.Models.AnalogInput", b =>

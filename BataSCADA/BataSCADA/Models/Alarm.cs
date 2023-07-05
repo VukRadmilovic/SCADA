@@ -13,7 +13,7 @@ namespace BataSCADA.Models
 
         public Alarm()
         {
-            Type = AlarmType.None;
+            Type = AlarmType.Low;
             Priority = 0;
             Limit = 0;
         }

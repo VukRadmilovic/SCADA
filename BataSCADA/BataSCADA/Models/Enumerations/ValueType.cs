@@ -1,7 +1,7 @@
 ﻿namespace BataSCADA.Models.Enumerations
 {
-    public enum DriverType
+    public enum ValueType
     {
-        Rtu, Simulation
+        Analog, Digital
     }
 }

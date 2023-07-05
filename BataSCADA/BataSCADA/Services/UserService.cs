@@ -28,5 +28,13 @@ namespace BataSCADA.Services
             var user = new User(userInfo);
             UserRepository.Save(user);
         }
+
+        public static bool GetIsLoggedIn(string username)
+        {
+            User user = UserRepository.GetByUsername(username);
+            if (user == null)
+                throw new ArgumentException("Username does not exist!");
+            return user.IsLoggedIn;
+        }
     }
 }
