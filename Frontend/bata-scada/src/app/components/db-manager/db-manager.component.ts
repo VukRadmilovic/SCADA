@@ -152,10 +152,15 @@ export class DbManagerComponent implements OnInit{
   }
 
   public modifiedValue(event: any) : void {
+    const cursorPosition = event.target.selectionStart;
     const tagName = <string>event.target.id;
-    console.log(typeof this.modifiedValues[tagName])
-    if(event.inputType == "insertText") this.modifiedValues[tagName] += <string>event.data;
-    else this.modifiedValues[tagName] = this.modifiedValues[tagName].slice(0,-1);
+    const prevVal = this.modifiedValues[tagName];
+    if(event.inputType == "insertText") {
+      this.modifiedValues[tagName] = prevVal.substring(0, cursorPosition - 1) + <string>event.data + prevVal.substring(cursorPosition - 1);
+    }
+    else {
+      this.modifiedValues[tagName] = prevVal.substring(0, cursorPosition) + prevVal.substring(cursorPosition + 1);
+    }
   }
 
   public changeValue(event: any) : void {
