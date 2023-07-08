@@ -2,6 +2,7 @@ using BataSCADA.Validation;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 using BataSCADA.Authorization;
+using BataSCADA.Services;
 using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,8 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
 {
     opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
+builder.Services.AddHostedService<RealTimeUnit>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

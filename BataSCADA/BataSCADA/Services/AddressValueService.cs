@@ -9,7 +9,7 @@ namespace BataSCADA.Services
     {
         public static void AddAddressValue(AddressValueDTO value)
         {
-            if (value.Address <= 20 || value.Address > 40)
+            if (value.Address is < 1 or > 17)
             {
                 throw new ArgumentException("Address value is not valid!");
             }
