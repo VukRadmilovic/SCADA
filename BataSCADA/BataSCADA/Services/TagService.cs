@@ -121,5 +121,52 @@ namespace BataSCADA.Services
                 TagRepository.ChangeDigitalOutputValue(digitalTag);
             }
         }
+
+        internal static double ScanInputTag(string tagName)
+        {
+            var tag = TagRepository.GetTagByTagName(tagName);
+            if (tag == null)
+                throw new ArgumentException("Tag with the specified name does not exist!");
+            if (tag is DigitalOutput || tag is AnalogOutput)
+                throw new ArgumentException("Tag is not an input tag!");
+
+            var milliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            double value = 0;
+            if (tag.Address.Equals(18))
+            {
+                value = Math.Sin(milliseconds);
+            }
+            else if (tag.Address.Equals(19))
+            {
+                value = Math.Cos(milliseconds);
+            }
+            if (tag.Address.Equals(20) || tag is DigitalInput) // ramp simulation
+            {
+                if (milliseconds % 2 == 0)
+                {
+                    value = 1;
+                }
+                else
+                {
+                    value = -1;
+                }
+            }
+
+            double minVal = -1;
+            double maxVal = -1;
+
+            if (tag is AnalogInput analogTag)
+            {
+                minVal = analogTag.LowLimit;
+                maxVal = analogTag.HighLimit;
+            }
+            else if (tag is DigitalInput)
+            {
+                minVal = 0;
+                maxVal = 1;
+            }
+
+            return ((value + 1) / 2) * (maxVal - minVal) + minVal;
+        }
     }
 }

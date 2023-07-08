@@ -52,6 +52,17 @@ export class InputTagsComponent implements OnInit{
         }
       }
     })
+
+    // setInterval(() => {
+    //   this.tagService.scan('testSim2').subscribe({
+    //     next : (result) => {
+    //       console.log(result);
+    //     },
+    //     error : (err) => {
+    //       console.log(err);
+    //     }
+    //   })
+    // }, 2000);
   }
 
   public typeChanged(value : any) : void {

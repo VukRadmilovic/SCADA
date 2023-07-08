@@ -139,5 +139,19 @@ namespace BataSCADA.Controllers
             }
         }
 
+        [HttpGet("scan-input-tag/{tagName}")]
+        public IActionResult ScanInputTag(string tagName)
+        {
+            try
+            {
+                tagName = HttpUtility.UrlDecode(tagName);
+                double value = TagService.ScanInputTag(tagName);
+                return Ok(value);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new GlobalError(400, "Tag", ex.Message));
+            }
+        }
     }
 }

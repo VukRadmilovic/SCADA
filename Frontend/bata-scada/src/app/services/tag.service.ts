@@ -59,4 +59,8 @@ export class TagService {
   public turnOffScan( tagName : string) : Observable<GlobalError | SuccessMessage> {
     return this.http.put<GlobalError | SuccessMessage>(this.prefix + "turn-off-scan/" + tagName,null);
   }
+
+  public scan(tagName : string): Observable<GlobalError | number> {
+    return this.http.get<GlobalError | number>(this.prefix + "scan-input-tag/" + tagName);
+  }
 }
