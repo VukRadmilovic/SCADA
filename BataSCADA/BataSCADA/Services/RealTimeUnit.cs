@@ -49,6 +49,10 @@ namespace BataSCADA.Services
 
                     try
                     {
+                        if (inputTag is AnalogInput analogInput2)
+                        {
+                            AlarmService.TriggerIfNeeded(analogInput2, dto.Value);
+                        }
                         AddressValueService.AddAddressValue(dto);
                     }
                     catch (ArgumentException ex)

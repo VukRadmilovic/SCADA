@@ -166,7 +166,14 @@ namespace BataSCADA.Services
                 maxVal = 1;
             }
 
-            return ((value + 1) / 2) * (maxVal - minVal) + minVal;
+            value = ((value + 1) / 2) * (maxVal - minVal) + minVal;
+
+            if (tag is AnalogInput analogInput)
+            {
+                AlarmService.TriggerIfNeeded(analogInput, value);
+            }
+
+            return value;
         }
 
         internal static void AddAlarm(Alarm alarm, string tagName)

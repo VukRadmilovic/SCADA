@@ -1,6 +1,4 @@
-﻿using System.Data;
-using System.Net;
-using BataSCADA.Models;
+﻿using BataSCADA.Models;
 using BataSCADA.Utils;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +10,17 @@ namespace BataSCADA.Repositories
         {
             using var dbContext = new DatabaseContext();
             dbContext.Alarms.Add(alarm);
+            dbContext.SaveChanges();
+        }
+
+        public static void Update(Alarm alarm, bool triggered = true)
+        {
+            using var dbContext = new DatabaseContext();
+            dbContext.Alarms.Attach(alarm);
+            if (triggered)
+                dbContext.Entry(alarm).Property(x => x.Triggered).IsModified = true;
+            else
+                dbContext.Entry(alarm).Property(x => x.SnoozedUntil).IsModified = true;
             dbContext.SaveChanges();
         }
 
