@@ -27,6 +27,7 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 import {MatGridListModule} from "@angular/material/grid-list";
 import { InputTagsComponent } from './components/input-tags/input-tags.component';
 import { RegistrationComponent } from './components/registration/registration.component';
+import { TrendingComponent } from './components/trending/trending.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { RegistrationComponent } from './components/registration/registration.co
     DbManagerComponent,
     NavigationComponent,
     InputTagsComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    TrendingComponent
   ],
     imports: [
         BrowserModule,

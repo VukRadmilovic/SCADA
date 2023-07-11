@@ -63,4 +63,8 @@ export class TagService {
   public scan(tagName : string): Observable<GlobalError | number> {
     return this.http.get<GlobalError | number>(this.prefix + "scan-input-tag/" + tagName);
   }
+
+  public tagLastValue(tagName : string): Observable<GlobalError | number> {
+    return this.http.get<GlobalError | number>(this.prefix + "tag-last-value/" + tagName);
+  }
 }

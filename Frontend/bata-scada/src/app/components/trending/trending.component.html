@@ -1,0 +1,32 @@
+<h1 class="mat-headline-3 center-horizontal">Input tags</h1>
+<mat-grid-list cols="3" rowHeight="8:4" class="width-100 height-50 overflow-scroll-y">
+  <mat-grid-tile *ngFor="let tag of inputTags;let i=index">
+    <div class="padding width-100">
+      <mat-card>
+        <div class="flex-row width-100">
+          <div class="width-70 center-left">
+            <mat-card-header>
+              <mat-card-title>{{tag.tagName}}</mat-card-title>
+              <mat-card-subtitle>Driver: {{tag.driver}}</mat-card-subtitle>
+              <mat-card-subtitle>Analog/Digital: {{tag.driver}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p *ngIf="tag.type == 'Analog'">{{tag.lowLimit}} - {{tag.highLimit}} <b>[{{tag.units}}]</b></p>
+              <p *ngIf="tag.type == 'Digital'">----------</p>
+              <p>{{tag.description}}</p>
+            </mat-card-content>
+          </div>
+          <div class="flex-column width-30 padding">
+            <div class="width-100">
+              <div class="center-horizontal flex-row"><!--OVDE DODAJ VREDNOST-->
+                <h4 class="center-vertical">Value: {{tag.value}}</h4>
+
+              </div>
+              <br>
+              <br>
+            </div> </div>
+        </div>
+      </mat-card>
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>
