@@ -1,5 +1,6 @@
 ﻿using BataSCADA.Models;
 using BataSCADA.Models.Enumerations;
+using BataSCADA.Services;
 
 namespace BataSCADA.DTOs
 {
@@ -16,6 +17,7 @@ namespace BataSCADA.DTOs
         public string Units { get; set; }
         public double Value { get; set; }
         public TagType Type { get; set; }
+        public List<Alarm>? Alarms { get; set; }
 
 
         public InputTagDTO(DigitalInput digitalInput)
@@ -44,6 +46,7 @@ namespace BataSCADA.DTOs
             HighLimit = analogInput.HighLimit;
             Units = analogInput.Units;
             Type = TagType.Analog;
+            Alarms = AlarmService.GetByTagName(analogInput.TagName);
         }
 
     }

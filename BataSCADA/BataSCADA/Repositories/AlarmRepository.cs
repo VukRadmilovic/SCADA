@@ -11,5 +11,11 @@ namespace BataSCADA.Repositories
             dbContext.Alarms.Add(alarm);
             dbContext.SaveChanges();
         }
+
+        public static List<Alarm>? GetByTagName(string tagName)
+        {
+            using var dbContext = new DatabaseContext();
+            return dbContext.Alarms.Where(alarm => alarm.AnalogInputTagName == tagName).ToList();
+        }
     }
 }

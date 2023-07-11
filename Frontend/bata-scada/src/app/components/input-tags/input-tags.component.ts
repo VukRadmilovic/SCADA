@@ -51,6 +51,7 @@ export class InputTagsComponent implements OnInit{
     this.tagService.getAllInputTags().subscribe({
       next : (results) => {
         this.inputTags = results;
+        console.log(this.inputTags);
         this.inputTags.forEach(() => {
           this.alarmCreationForm.push(
             this.formBuilder.group({
@@ -246,5 +247,9 @@ export class InputTagsComponent implements OnInit{
     return ((value != null) &&
       (value !== '') &&
       !isNaN(Number(value.toString())));
+  }
+
+  deleteAlarm($event: MouseEvent) {
+    console.log($event);
   }
 }

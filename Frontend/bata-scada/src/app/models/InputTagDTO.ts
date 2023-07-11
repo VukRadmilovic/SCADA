@@ -12,7 +12,7 @@ export interface InputTagDTO {
   lowLimit : number,
   highLimit : number,
   units : string,
-  alarms : Alarm[],
   type : TagType,
-  value : number
+  value : number,
+  alarms : Alarm[]
 }

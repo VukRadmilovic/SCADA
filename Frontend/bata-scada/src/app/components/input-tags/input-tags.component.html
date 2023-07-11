@@ -31,6 +31,26 @@
             <button mat-raised-button color="primary" id="{{tag.tagName}}" class="width-70 center-horizontal" (click)="changeValue($event)">Change</button>
           </div>
         </div>
+        <h2 class="center-horizontal">Alarms:</h2>
+        <div class="flex-column border padding margin">
+          <table>
+            <thead>
+            <tr>
+              <th>Type</th>
+              <th>Priority</th>
+              <th>Limit</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let alarm of tag.alarms;let j=index">
+              <td>{{alarm.type}}</td>
+              <td>{{alarm.priority}}</td>
+              <td>{{alarm.limit}}</td>
+              <td><button mat-raised-button color="warn" class="center-horizontal" id="{{tag.tagName + '-' + j}}" (click)="deleteAlarm($event)">Delete</button></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
         <br>
         <div class="flex-column border padding margin" [id]="'form-' + i">
           <form [formGroup]="alarmCreationForm[i]">
