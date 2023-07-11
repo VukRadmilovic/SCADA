@@ -1,0 +1,19 @@
+<h1 class="mat-headline-3 center-horizontal">Alarms</h1>
+<div class="width-100 overflow-scroll-y flex-row">
+  <mat-card>
+    <mat-card-content class="flex-row">
+      <div *ngFor="let alarm of alarms; let j=index" class="flex-row margin padding">
+        <mat-card>
+          <mat-card-content>
+            <p><strong>Tag:</strong> {{alarm.tagName}}</p>
+            <p><strong>Type:</strong> {{alarm.type}}</p>
+            <p><strong>Priority:</strong> {{alarm.priority}}</p>
+            <p><strong>Limit:</strong> {{alarm.limit}}</p>
+            <button mat-button color="primary" id="{{'a' + alarm.id}}" (click)="snooze($event)">Snooze</button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+</div>

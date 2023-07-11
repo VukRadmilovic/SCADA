@@ -27,5 +27,11 @@ namespace BataSCADA.Controllers
                 return BadRequest(new GlobalError(400, "Alarm", ex.Message));
             }
         }
+
+        [HttpGet("active")]
+        public IActionResult GetActive()
+        {
+            return Ok(AlarmService.GetActive());
+        }
     }
 }

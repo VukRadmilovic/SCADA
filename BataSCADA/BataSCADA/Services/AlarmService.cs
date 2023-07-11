@@ -1,4 +1,5 @@
-﻿using BataSCADA.Models;
+﻿using BataSCADA.DTOs;
+using BataSCADA.Models;
 using BataSCADA.Models.Enumerations;
 using BataSCADA.Repositories;
 using BataSCADA.Utils;
@@ -25,7 +26,7 @@ namespace BataSCADA.Services
             foreach (var alarm in alarms)
             {
                 if (((alarm.Type == AlarmType.High && newValue >= alarm.Limit) ||
-                    (alarm.Type == AlarmType.Low && newValue <= alarm.Limit)) &&
+                     (alarm.Type == AlarmType.Low && newValue <= alarm.Limit)) &&
                     !alarm.Triggered)
                 {
                     alarm.Triggered = true;
@@ -33,7 +34,9 @@ namespace BataSCADA.Services
                     LogToFile($"Alarm triggered: TagName={tag.TagName}, AlarmId={alarm.Id}, Value={newValue}, Limit={alarm.Limit}");
                     LogToDatabase(tag.TagName, alarm.Id, newValue, alarm.Limit, true);
                 }
-                else if(alarm.Triggered)
+                else if(!(((alarm.Type == AlarmType.High && newValue >= alarm.Limit) ||
+                         (alarm.Type == AlarmType.Low && newValue <= alarm.Limit))) && 
+                        alarm.Triggered)
                 {
                     alarm.Triggered = false;
                     AlarmRepository.Update(alarm);
@@ -69,6 +72,15 @@ namespace BataSCADA.Services
                 dbContext.AlarmLogs.Add(alarmLog);
                 dbContext.SaveChanges();
             }
+        }
+
+        public static List<AlarmDTO>? GetActive()
+        {
+            var active = AlarmRepository.GetActive();
+            var dtos = new List<AlarmDTO>();
+            if (active == null) return dtos;
+            dtos.AddRange(active.Select(alarm => new AlarmDTO(alarm)));
+            return dtos;
         }
     }
 }
