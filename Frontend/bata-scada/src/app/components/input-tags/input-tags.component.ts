@@ -10,6 +10,7 @@ import {NotificationsService} from "../../services/notifications.service";
 import {Alarm} from "../../models/Alarm";
 import {AlarmType} from "../../models/enums/AlarmType";
 import {AlarmDTO} from "../../models/AlarmDTO";
+import {AlarmService} from "../../services/alarm.service";
 
 @Component({
   selector: 'app-input-tags',
@@ -33,7 +34,8 @@ export class InputTagsComponent implements OnInit{
   alarmCreationForm: FormGroup[] = [];
   constructor(private tagService: TagService,
               private notificationService : NotificationsService,
-              private formBuilder: FormBuilder,) {}
+              private formBuilder: FormBuilder,
+              private alarmService: AlarmService) {}
   ngOnInit() {
     this.tagCreationForm = this.formBuilder.group({
       tagType: new FormControl(null, [Validators.required]),
@@ -51,7 +53,6 @@ export class InputTagsComponent implements OnInit{
     this.tagService.getAllInputTags().subscribe({
       next : (results) => {
         this.inputTags = results;
-        console.log(this.inputTags);
         this.inputTags.forEach(() => {
           this.alarmCreationForm.push(
             this.formBuilder.group({
@@ -69,17 +70,6 @@ export class InputTagsComponent implements OnInit{
         }
       }
     })
-
-    // setInterval(() => {
-    //   this.tagService.scan('testSim2').subscribe({
-    //     next : (result) => {
-    //       console.log(result);
-    //     },
-    //     error : (err) => {
-    //       console.log(err);
-    //     }
-    //   })
-    // }, 2000);
   }
 
   public typeChanged(value : any) : void {
@@ -219,9 +209,7 @@ export class InputTagsComponent implements OnInit{
 
   newAlarm(index: number) {
     const form = this.alarmCreationForm[index]
-    console.log(form.value + ', ' + this.inputTags[index].tagName);
     if (form.valid && this.isNumber(this.alarmCreationForm[index].controls['limit'].value)) {
-      console.log('valid');
       const alarm : AlarmDTO = {
         type: <AlarmType>form.controls['type'].value,
         limit: <number>form.controls['limit'].value,
@@ -250,6 +238,17 @@ export class InputTagsComponent implements OnInit{
   }
 
   deleteAlarm($event: MouseEvent) {
-    console.log($event);
+    const alarmId = ((<Element>$event.target).parentElement as Element).id.slice(1);
+    this.alarmService.deleteAlarm(alarmId).subscribe({
+      next: () => {
+        window.location.reload();
+      },
+      error: (err) => {
+        console.log(err);
+        for (let key in err.error.errors) {
+          this.notificationService.createNotification(err.error.errors[key]);
+        }
+      }
+    })
   }
 }

@@ -10,5 +10,12 @@ namespace BataSCADA.Services
         {
             return AlarmRepository.GetByTagName(tagName);
         }
+
+        internal static void Delete(int id)
+        {
+            if (AlarmRepository.GetById(id) == null)
+                throw new ArgumentException("Alarm with the specified id does not exist!");
+            AlarmRepository.Delete(id);
+        }
     }
 }

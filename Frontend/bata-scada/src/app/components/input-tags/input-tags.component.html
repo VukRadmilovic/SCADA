@@ -46,7 +46,7 @@
               <td>{{alarm.type}}</td>
               <td>{{alarm.priority}}</td>
               <td>{{alarm.limit}}</td>
-              <td><button mat-raised-button color="warn" class="center-horizontal" id="{{tag.tagName + '-' + j}}" (click)="deleteAlarm($event)">Delete</button></td>
+              <td><button mat-raised-button color="warn" class="center-horizontal" id="{{'a' + alarm.id}}" (click)="deleteAlarm($event)">Delete</button></td>
             </tr>
             </tbody>
           </table>
