@@ -14,22 +14,38 @@ export class AlarmsComponent implements OnInit{
   constructor(private notificationService : NotificationsService,
               private alarmService: AlarmService) {}
   snooze($event: MouseEvent) {
-
+    const alarmId = ((<Element>$event.target).parentElement as Element).id.slice(1);
+    this.alarmService.snooze(alarmId).subscribe({
+      next : (results) => {
+        this.notificationService.createNotification("Alarm snoozed");
+        this.refresh();
+      },
+      error : (err) => {
+        console.log(err);
+        for (let key in err.error.errors) {
+          this.notificationService.createNotification(err.error.errors[key]);
+        }
+      }
+    });
   }
 
   ngOnInit(): void {
     setInterval(() => {
-      this.alarmService.getActive().subscribe({
-        next : (results) => {
-          this.alarms = results;
-        },
-        error : (err) => {
-          console.log(err);
-          for (let key in err.error.errors) {
-            this.notificationService.createNotification(err.error.errors[key]);
-          }
-        }
-      });
+      this.refresh();
     }, 1000);
+  }
+
+  private refresh() {
+    this.alarmService.getActive().subscribe({
+      next: (results) => {
+        this.alarms = results;
+      },
+      error: (err) => {
+        console.log(err);
+        for (let key in err.error.errors) {
+          this.notificationService.createNotification(err.error.errors[key]);
+        }
+      }
+    });
   }
 }

@@ -82,5 +82,13 @@ namespace BataSCADA.Services
             dtos.AddRange(active.Select(alarm => new AlarmDTO(alarm)));
             return dtos;
         }
+
+        public static void Snooze(int id)
+        {
+            var alarm = AlarmRepository.GetById(id) ?? throw new ArgumentException("Invalid ID");
+            var snoozeLength = 30 / alarm.Priority;
+            alarm.SnoozedUntil = DateTime.Now.AddSeconds(snoozeLength);
+            AlarmRepository.Update(alarm, false);
+        }
     }
 }

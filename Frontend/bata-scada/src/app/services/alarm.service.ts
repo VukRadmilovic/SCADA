@@ -21,4 +21,8 @@ export class AlarmService {
   public getActive() : Observable<AlarmWithTagNameDTO[]> {
     return this.http.get<AlarmWithTagNameDTO[]>(this.prefix + "active");
   }
+
+  public snooze(id : string) : Observable<GlobalError | SuccessMessage> {
+    return this.http.put<GlobalError | SuccessMessage>(this.prefix + "snooze/" + id,null);
+  }
 }

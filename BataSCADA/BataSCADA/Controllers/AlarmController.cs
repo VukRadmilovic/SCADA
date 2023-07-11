@@ -33,5 +33,19 @@ namespace BataSCADA.Controllers
         {
             return Ok(AlarmService.GetActive());
         }
+
+        [HttpPut("snooze/{id}")]
+        public IActionResult Snooze(int id)
+        {
+            try
+            {
+                AlarmService.Snooze(id);
+                return Ok(new SuccessMessageDTO("Alarm successfully snoozed!"));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new GlobalError(400, "Snooze", ex.Message));
+            }
+        }
     }
 }
