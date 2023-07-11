@@ -3,8 +3,8 @@
 <br>
 <br>
 <h1 class="mat-headline-3 center-horizontal">Input tags</h1>
-<mat-grid-list cols="3" class="width-100 overflow-scroll-y">
-  <mat-grid-tile *ngFor="let tag of inputTags;let i=index">
+<div class="width-100 overflow-scroll-y flex-row">
+  <div *ngFor="let tag of inputTags;let i=index" class="width-30">
     <div class="padding width-100">
       <mat-card>
         <div class="flex-row width-100">
@@ -82,12 +82,12 @@
             <button mat-raised-button color="accent" type="submit" class="center-horizontal" (click)="newAlarm(i)">Add alarm</button>
           </form>
         </div>
-        <button mat-raised-button color="warn" class="center-horizontal" id="{{tag.tagName}}" (click)="delete($event)">Delete</button>
+        <button mat-raised-button color="warn" class="center-horizontal" id="{{tag.tagName}}" (click)="delete($event)">Delete tag</button>
         <br>
       </mat-card>
     </div>
-  </mat-grid-tile>
-</mat-grid-list>
+  </div>
+</div>
 <button mat-raised-button class="stick-to-bottom center-horizontal" color="accent" (click)="showAddForm()">Add input tag</button>
 <div class="overlay width-100 height-100 z-index-higher" *ngIf="showForm">
   <form [formGroup]="tagCreationForm" style="top:15%;position: relative" class="center-horizontal">
