@@ -153,5 +153,20 @@ namespace BataSCADA.Controllers
                 return BadRequest(new GlobalError(400, "Tag", ex.Message));
             }
         }
+
+        [HttpGet("tag-last-value/{tagName}")]
+        public IActionResult TagLastValue(string tagName)
+        {
+            try
+            {
+                tagName = HttpUtility.UrlDecode(tagName);
+                double value = TagService.TagLastValue(tagName);
+                return Ok(value);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new GlobalError(400, "Tag", ex.Message));
+            }
+        }
     }
 }

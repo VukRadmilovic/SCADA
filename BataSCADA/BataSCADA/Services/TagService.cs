@@ -168,5 +168,16 @@ namespace BataSCADA.Services
 
             return ((value + 1) / 2) * (maxVal - minVal) + minVal;
         }
+
+        internal static double TagLastValue(string tagName)
+        {
+            var tag = TagRepository.GetTagByTagName(tagName);
+            if (tag == null)
+                throw new ArgumentException("Tag with the specified name does not exist!");
+            if (tag is DigitalOutput || tag is AnalogOutput)
+                throw new ArgumentException("Tag is not an input tag!");
+
+            return AddressValueRepository.GetLastValueByAddress(tag.Address).Value;
+        }
     }
 }
