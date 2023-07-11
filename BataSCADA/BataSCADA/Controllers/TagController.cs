@@ -153,5 +153,20 @@ namespace BataSCADA.Controllers
                 return BadRequest(new GlobalError(400, "Tag", ex.Message));
             }
         }
+
+        [HttpPost("add-alarm/{tagName}")]
+        public IActionResult AddAlarm(Alarm alarm, string tagName)
+        {
+            try
+            {
+                tagName = HttpUtility.UrlDecode(tagName);
+                TagService.AddAlarm(alarm, tagName);
+                return Ok(new SuccessMessageDTO("Alarm has been successfully added!"));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new GlobalError(400, "Tag", ex.Message));
+            }
+        }
     }
 }

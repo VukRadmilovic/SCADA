@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BataSCADA.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230705174531_Migration 5 6")]
-    partial class Migration56
+    [Migration("20230711110426_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,6 +59,7 @@ namespace BataSCADA.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AnalogInputTagName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Limit")
@@ -209,8 +210,10 @@ namespace BataSCADA.Migrations
             modelBuilder.Entity("BataSCADA.Models.Alarm", b =>
                 {
                     b.HasOne("BataSCADA.Models.AnalogInput", null)
-                        .WithMany("Alarms")
-                        .HasForeignKey("AnalogInputTagName");
+                        .WithMany()
+                        .HasForeignKey("AnalogInputTagName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BataSCADA.Models.AnalogInput", b =>
@@ -247,11 +250,6 @@ namespace BataSCADA.Migrations
                         .HasForeignKey("BataSCADA.Models.DigitalOutput", "TagName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("BataSCADA.Models.AnalogInput", b =>
-                {
-                    b.Navigation("Alarms");
                 });
 #pragma warning restore 612, 618
         }

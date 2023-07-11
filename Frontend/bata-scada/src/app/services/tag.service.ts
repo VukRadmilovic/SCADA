@@ -11,6 +11,8 @@ import {AnalogOutput} from "../models/AnalogOutput";
 import {ValueDTO} from "../models/ValueDTO";
 import {DigitalInput} from "../models/DigitalInput";
 import {AnalogInputDTO} from "../models/AnalogInputDTO";
+import {Alarm} from "../models/Alarm";
+import {AlarmDTO} from "../models/AlarmDTO";
 
 @Injectable({
   providedIn: 'root'
@@ -62,5 +64,9 @@ export class TagService {
 
   public scan(tagName : string): Observable<GlobalError | number> {
     return this.http.get<GlobalError | number>(this.prefix + "scan-input-tag/" + tagName);
+  }
+
+  public addAlarm(tagName : string, alarm: AlarmDTO) : Observable<GlobalError | SuccessMessage> {
+    return this.http.post<GlobalError | SuccessMessage>(this.prefix + "add-alarm/" + tagName, alarm);
   }
 }

@@ -56,7 +56,8 @@ namespace BataSCADA.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AnalogInputTagName")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Limit")
                         .HasColumnType("float");
@@ -68,8 +69,6 @@ namespace BataSCADA.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AnalogInputTagName");
 
                     b.ToTable("Alarms");
                 });
@@ -203,13 +202,6 @@ namespace BataSCADA.Migrations
                     b.ToTable("DigitalOutputs", (string)null);
                 });
 
-            modelBuilder.Entity("BataSCADA.Models.Alarm", b =>
-                {
-                    b.HasOne("BataSCADA.Models.AnalogInput", null)
-                        .WithMany("Alarms")
-                        .HasForeignKey("AnalogInputTagName");
-                });
-
             modelBuilder.Entity("BataSCADA.Models.AnalogInput", b =>
                 {
                     b.HasOne("BataSCADA.Models.Tag", null)
@@ -244,11 +236,6 @@ namespace BataSCADA.Migrations
                         .HasForeignKey("BataSCADA.Models.DigitalOutput", "TagName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("BataSCADA.Models.AnalogInput", b =>
-                {
-                    b.Navigation("Alarms");
                 });
 #pragma warning restore 612, 618
         }

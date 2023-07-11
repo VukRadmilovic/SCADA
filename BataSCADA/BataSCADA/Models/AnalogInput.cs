@@ -8,7 +8,6 @@ namespace BataSCADA.Models
         public DriverType Driver { get; set; }
         public int ScanTime { get; set; }
         public bool IsOn { get; set; }
-        public List<Alarm> Alarms { get; set; }
         public double LowLimit { get; set; }
         public double HighLimit { get; set; }
         public string Units { get; set; }
@@ -23,7 +22,6 @@ namespace BataSCADA.Models
             Driver = tagInfo.Driver;
             ScanTime = tagInfo.ScanTime;
             IsOn = tagInfo.IsOn;
-            Alarms = new List<Alarm>();
             LowLimit = tagInfo.LowLimit;
             HighLimit = tagInfo.HighLimit;
             Units = tagInfo.Units;
