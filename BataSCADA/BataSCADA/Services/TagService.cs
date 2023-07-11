@@ -169,6 +169,18 @@ namespace BataSCADA.Services
             return ((value + 1) / 2) * (maxVal - minVal) + minVal;
         }
 
+        internal static void AddAlarm(Alarm alarm, string tagName)
+        {
+            var tag = TagRepository.GetTagByTagName(tagName);
+            if (tag == null)
+                throw new ArgumentException("Tag with the specified name does not exist!");
+            if (tag is not AnalogInput input)
+                throw new ArgumentException("Tag is not an analog input tag!");
+
+            alarm.AnalogInputTagName = tagName;
+            AlarmRepository.Save(alarm);
+        }
+
         internal static double TagLastValue(string tagName)
         {
             var tag = TagRepository.GetTagByTagName(tagName);

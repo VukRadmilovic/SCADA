@@ -18,6 +18,7 @@ namespace BataSCADA.Utils
             modelBuilder.Entity<DigitalInput>().ToTable("DigitalInputs");
             modelBuilder.Entity<DigitalOutput>().ToTable("DigitalOutputs");
         }
+
         public DbSet<User>? Users { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<AnalogInput> AnalogInputs { get; set; }

@@ -14,7 +14,6 @@ namespace BataSCADA.DTOs
         public double LowLimit { get; set; }
         public double HighLimit { get; set; }
         public string Units { get; set; }
-        public List<Alarm> Alarms { get; set; }
         public double Value { get; set; }
         public TagType Type { get; set; }
 
@@ -27,7 +26,6 @@ namespace BataSCADA.DTOs
             Driver = digitalInput.Driver;
             ScanTime = digitalInput.ScanTime;
             IsOn = digitalInput.IsOn;
-            Alarms = null;
             LowLimit = 0;
             HighLimit = 0;
             Units = "";
@@ -42,7 +40,6 @@ namespace BataSCADA.DTOs
             Driver = analogInput.Driver;
             ScanTime = analogInput.ScanTime;
             IsOn = analogInput.IsOn;
-            Alarms = analogInput.Alarms;
             LowLimit = analogInput.LowLimit;
             HighLimit = analogInput.HighLimit;
             Units = analogInput.Units;

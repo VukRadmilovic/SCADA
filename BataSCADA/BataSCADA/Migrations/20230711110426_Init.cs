@@ -1,15 +1,32 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace BataSCADA.Migrations
 {
     /// <inheritdoc />
-    public partial class Migration2 : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "AddressValues",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Address = table.Column<int>(type: "int", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Value = table.Column<double>(type: "float", nullable: false),
+                    ValueType = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AddressValues", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Tags",
                 columns: table => new
@@ -24,6 +41,46 @@ namespace BataSCADA.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsLoggedIn = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnalogInputs",
+                columns: table => new
+                {
+                    TagName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Driver = table.Column<int>(type: "int", nullable: false),
+                    ScanTime = table.Column<int>(type: "int", nullable: false),
+                    IsOn = table.Column<bool>(type: "bit", nullable: false),
+                    LowLimit = table.Column<double>(type: "float", nullable: false),
+                    HighLimit = table.Column<double>(type: "float", nullable: false),
+                    Units = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnalogInputs", x => x.TagName);
+                    table.ForeignKey(
+                        name: "FK_AnalogInputs_Tags_TagName",
+                        column: x => x.TagName,
+                        principalTable: "Tags",
+                        principalColumn: "TagName",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AnalogOutputs",
                 columns: table => new
                 {
@@ -31,7 +88,8 @@ namespace BataSCADA.Migrations
                     InitialValue = table.Column<double>(type: "float", nullable: false),
                     LowLimit = table.Column<double>(type: "float", nullable: false),
                     HighLimit = table.Column<double>(type: "float", nullable: false),
-                    Units = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Units = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Value = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -69,7 +127,8 @@ namespace BataSCADA.Migrations
                 columns: table => new
                 {
                     TagName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    InitialValue = table.Column<bool>(type: "bit", nullable: false)
+                    InitialValue = table.Column<bool>(type: "bit", nullable: false),
+                    Value = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,26 +142,6 @@ namespace BataSCADA.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AnalogInputs",
-                columns: table => new
-                {
-                    TagName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LowLimit = table.Column<double>(type: "float", nullable: false),
-                    HighLimit = table.Column<double>(type: "float", nullable: false),
-                    Units = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AnalogInputs", x => x.TagName);
-                    table.ForeignKey(
-                        name: "FK_AnalogInputs_DigitalInputs_TagName",
-                        column: x => x.TagName,
-                        principalTable: "DigitalInputs",
-                        principalColumn: "TagName",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Alarms",
                 columns: table => new
                 {
@@ -111,7 +150,7 @@ namespace BataSCADA.Migrations
                     Type = table.Column<int>(type: "int", nullable: false),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Limit = table.Column<double>(type: "float", nullable: false),
-                    AnalogInputTagName = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    AnalogInputTagName = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -120,7 +159,8 @@ namespace BataSCADA.Migrations
                         name: "FK_Alarms_AnalogInputs_AnalogInputTagName",
                         column: x => x.AnalogInputTagName,
                         principalTable: "AnalogInputs",
-                        principalColumn: "TagName");
+                        principalColumn: "TagName",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -133,19 +173,25 @@ namespace BataSCADA.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AddressValues");
+
+            migrationBuilder.DropTable(
                 name: "Alarms");
 
             migrationBuilder.DropTable(
                 name: "AnalogOutputs");
 
             migrationBuilder.DropTable(
+                name: "DigitalInputs");
+
+            migrationBuilder.DropTable(
                 name: "DigitalOutputs");
 
             migrationBuilder.DropTable(
-                name: "AnalogInputs");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "DigitalInputs");
+                name: "AnalogInputs");
 
             migrationBuilder.DropTable(
                 name: "Tags");

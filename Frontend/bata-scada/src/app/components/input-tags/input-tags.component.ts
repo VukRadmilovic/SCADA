@@ -7,6 +7,9 @@ import {DigitalInput} from "../../models/DigitalInput";
 import {DriverType} from "../../models/enums/DriverType";
 import {AnalogInputDTO} from "../../models/AnalogInputDTO";
 import {NotificationsService} from "../../services/notifications.service";
+import {Alarm} from "../../models/Alarm";
+import {AlarmType} from "../../models/enums/AlarmType";
+import {AlarmDTO} from "../../models/AlarmDTO";
 
 @Component({
   selector: 'app-input-tags',
@@ -19,11 +22,15 @@ export class InputTagsComponent implements OnInit{
   inputTagValues : boolean[] = [];
   types = ["Analog","Digital"];
   drivers = ["Rtu","Simulation"];
+  alarmTypes = ["High", "Low"];
+  priorities = [1, 2, 3];
   addresses = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
   isDigitalChosen = true;
   tagCreationForm! : FormGroup;
   showForm = false;
   modifiedValues : any = {};
+  limit: any;
+  alarmCreationForm: FormGroup[] = [];
   constructor(private tagService: TagService,
               private notificationService : NotificationsService,
               private formBuilder: FormBuilder,) {}
@@ -44,6 +51,15 @@ export class InputTagsComponent implements OnInit{
     this.tagService.getAllInputTags().subscribe({
       next : (results) => {
         this.inputTags = results;
+        this.inputTags.forEach(() => {
+          this.alarmCreationForm.push(
+            this.formBuilder.group({
+              type: new FormControl(null, [Validators.required]),
+              priority: new FormControl(null, [Validators.required]),
+              limit: new FormControl(null, [Validators.required])
+            })
+          )
+        });
       },
       error : (err) => {
         console.log(err);
@@ -198,5 +214,37 @@ export class InputTagsComponent implements OnInit{
         }
       })
     }
+  }
+
+  newAlarm(index: number) {
+    const form = this.alarmCreationForm[index]
+    console.log(form.value + ', ' + this.inputTags[index].tagName);
+    if (form.valid && this.isNumber(this.alarmCreationForm[index].controls['limit'].value)) {
+      console.log('valid');
+      const alarm : AlarmDTO = {
+        type: <AlarmType>form.controls['type'].value,
+        limit: <number>form.controls['limit'].value,
+        priority: <number>form.controls['priority'].value
+      };
+      this.tagService.addAlarm(this.inputTags[index].tagName, alarm).subscribe({
+        next: (result) => {
+          window.location.reload();
+        },
+        error: (err) => {
+          console.log(err);
+          for (let key in err.error.errors) {
+            this.notificationService.createNotification(err.error.errors[key]);
+          }
+        }
+        }
+      )
+    }
+  }
+
+  isNumber(value?: string | number): boolean
+  {
+    return ((value != null) &&
+      (value !== '') &&
+      !isNaN(Number(value.toString())));
   }
 }

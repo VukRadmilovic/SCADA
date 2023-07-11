@@ -3,7 +3,7 @@
 <br>
 <br>
 <h1 class="mat-headline-3 center-horizontal">Input tags</h1>
-<mat-grid-list cols="3" rowHeight="8:4" class="width-100 height-50 overflow-scroll-y">
+<mat-grid-list cols="3" class="width-100 overflow-scroll-y">
   <mat-grid-tile *ngFor="let tag of inputTags;let i=index">
     <div class="padding width-100">
       <mat-card>
@@ -32,6 +32,36 @@
           </div>
         </div>
         <br>
+        <div class="flex-column border padding margin" [id]="'form-' + i">
+          <form [formGroup]="alarmCreationForm[i]">
+            <mat-form-field style="margin-right: 15px">
+              <mat-label>Type:</mat-label>
+              <mat-select formControlName="type">
+                <mat-option *ngFor="let type of alarmTypes" [value]="type">{{type}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="alarmCreationForm[i].controls['type'].hasError('required')">
+                Type is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field style="margin-right: 15px">
+              <mat-label>Priority:</mat-label>
+              <mat-select formControlName="priority">
+                <mat-option *ngFor="let priority of priorities" [value]="priority">{{priority}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="alarmCreationForm[i].controls['priority'].hasError('required')">
+                Priority is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field style="margin-right: 15px">
+              <mat-label>Limit</mat-label>
+              <input matInput formControlName="limit">
+              <mat-error *ngIf="alarmCreationForm[i].controls['limit'].hasError('required')">
+                Limit is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+            <button mat-raised-button color="accent" type="submit" class="center-horizontal" (click)="newAlarm(i)">Add alarm</button>
+          </form>
+        </div>
         <button mat-raised-button color="warn" class="center-horizontal" id="{{tag.tagName}}" (click)="delete($event)">Delete</button>
         <br>
       </mat-card>
