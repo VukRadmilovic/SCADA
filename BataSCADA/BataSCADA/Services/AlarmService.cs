@@ -95,6 +95,16 @@ namespace BataSCADA.Services
         {
             var alarms = AlarmRepository.GetByPriority(priority);
             List<AlarmLogsDTO> logs = new List<AlarmLogsDTO>();
+            foreach (Alarm alarm in alarms)
+            {
+                AlarmLogsDTO alarmLogs = new AlarmLogsDTO();
+                alarmLogs.Priority = priority;
+                alarmLogs.Limit = alarm.Limit;
+                alarmLogs.Id = alarm.Id;
+                logs.Add(alarmLogs);
+            }
+            return logs;
+            /*List<AlarmLogsDTO> logs = new List<AlarmLogsDTO>();
             List<AlarmLog> allLogs = AlarmRepository.GetLogs();
             foreach (Alarm alarm in alarms)
             {
@@ -109,10 +119,11 @@ namespace BataSCADA.Services
                         logDTO.Value = log.Value;
                         logDTO.Timestamp = log.Timestamp;
                         logDTO.Type = alarm.Type;
+                        logs.Add(logDTO);
                     }
                 }
             }
-            return logs;
+            return logs;*/
         }
 
         internal static List<AlarmLogsDTO> SomeTime(DateTime from, DateTime to)
@@ -128,6 +139,7 @@ namespace BataSCADA.Services
                     logDTO.Limit = alarm.Limit;
                     logDTO.Value = alarm.Value;
                     logDTO.Timestamp = alarm.Timestamp;
+                    logs.Add(logDTO);
                 }
             }
             return logs;
