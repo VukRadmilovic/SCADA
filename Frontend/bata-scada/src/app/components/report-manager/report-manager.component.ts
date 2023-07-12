@@ -3,34 +3,9 @@ import {TagService} from "../../services/tag.service";
 import {NotificationsService} from "../../services/notifications.service";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {TagValueWithTimestamp} from "../../models/TagValueWithTimestamp";
-import {AlarmStamps} from "../../models/AlarmStamps"
 import {AlarmStampsWithPriority} from "../../models/AlarmStampsWithPriority";
 import {AlarmType} from "../../models/enums/AlarmType";
 import {TagValueWithoutNameDTO} from "../../models/TagValueWithoutNameDTO";
-import {TagType} from "../../models/enums/TagType";
-import {MatTableDataSource} from "@angular/material/table";
-
-const ELEMENT_DATA: TagValueWithTimestamp[] = [
-  {tagName: 'test', address: 1, value: 1.0079, timestamp: new Date('2024-07-22')},
-  {tagName: 'test', address: 1, value: 1.0079, timestamp: new Date('2024-07-25')},
-  {tagName: 'test', address: 1, value: 1.0079, timestamp: new Date('2024-07-26')},
-  {tagName: 'test', address: 1, value: 1.0079, timestamp: new Date('2024-07-27')},
-  {tagName: 'test', address: 1, value: 1.0079, timestamp: new Date('2024-07-28')},
-];
-
-const ELEMENT_DATA1: AlarmStamps[] =[
-  {alarmId: 1, limit: 100, value:110, timestamp: new Date('2024-07-22')},
-  {alarmId: 1, limit: 100, value:110, timestamp: new Date('2024-07-22')},
-  {alarmId: 1, limit: 100, value:110, timestamp: new Date('2024-07-22')},
-  {alarmId: 1, limit: 100, value:110, timestamp: new Date('2024-07-22')}
-]
-
-const ELEMENT_DATA2: AlarmStampsWithPriority[] =[
-  {alarmId: 1, limit: 100, value:110, timestamp: new Date('2024-07-22'), priority: 1, AlarmType: AlarmType.High},
-  {alarmId: 1, limit: 100, value:110, timestamp: new Date('2024-07-22'), priority: 3, AlarmType: AlarmType.High},
-  {alarmId: 1, limit: 100, value:110, timestamp: new Date('2024-07-22'), priority: 2, AlarmType: AlarmType.High},
-  {alarmId: 1, limit: 100, value:110, timestamp: new Date('2024-07-22'), priority: 1, AlarmType: AlarmType.High}
-]
 
 @Component({
   selector: 'app-report-manager',
@@ -39,15 +14,9 @@ const ELEMENT_DATA2: AlarmStampsWithPriority[] =[
 })
 export class ReportManagerComponent implements OnInit{
   displayedColumns: string[] = ['tagName', 'address', 'value', 'timestamp'];
-  displayedColumns1: string[] = ['alarmId', 'limit', 'value', 'timestamp'];
-  displayedColumns2: string[] = ['alarmId', 'limit', 'value', 'priority', 'timestamp'];
+  displayedColumns1: string[] = ['id','tagName', 'limit', 'value', 'timestamp'];
+  displayedColumns2: string[] = ['id','tagName', 'limit', 'type', 'priority'];
   displayedColumns6: string[] = ['address', 'value', 'timestamp'];
-  // dataSource1 = new MatTableDataSource<AlarmStampsWithPriority>();
-  // dataSource2 = new MatTableDataSource<AlarmStampsWithPriority>();
-  // dataSource3 = new MatTableDataSource<TagValueWithTimestamp>();
-  // dataSource4 = new MatTableDataSource<TagValueWithTimestamp>();
-  // dataSource5 = new MatTableDataSource<TagValueWithTimestamp>();
-  // dataSource6 = new MatTableDataSource<TagValueWithoutNameDTO>();
 
   dataSource1 : AlarmStampsWithPriority[] = [];
   dataSource2 : AlarmStampsWithPriority[] = [];

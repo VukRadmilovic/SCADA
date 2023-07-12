@@ -11,8 +11,8 @@ export class NavigationComponent {
   constructor(private userService: UserService, private router : Router) {}
 
   public logout() : void {
-    const username = <string>sessionStorage.getItem("user");
-    sessionStorage.removeItem("user");
+    const username = <string>localStorage.getItem("user");
+    localStorage.removeItem("user");
     this.userService.logout(username);
     this.router.navigate(['login']);
   }

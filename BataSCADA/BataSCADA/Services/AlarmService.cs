@@ -99,6 +99,7 @@ namespace BataSCADA.Services
             {
                 AlarmLogsDTO alarmLogs = new AlarmLogsDTO();
                 alarmLogs.Priority = priority;
+                alarmLogs.TagName = alarm.AnalogInputTagName;
                 alarmLogs.Limit = alarm.Limit;
                 alarmLogs.Id = alarm.Id;
                 logs.Add(alarmLogs);
@@ -132,6 +133,7 @@ namespace BataSCADA.Services
             List<AlarmLogsDTO> logs = new List<AlarmLogsDTO>();
             foreach (AlarmLog alarm in alarms)
             {
+                if(!alarm.IsTriggered) continue;
                 if(alarm.Timestamp > from && alarm.Timestamp < to)
                 {
                     AlarmLogsDTO logDTO = new AlarmLogsDTO();
@@ -139,6 +141,7 @@ namespace BataSCADA.Services
                     logDTO.Limit = alarm.Limit;
                     logDTO.Value = alarm.Value;
                     logDTO.Timestamp = alarm.Timestamp;
+                    logDTO.TagName = alarm.TagName;
                     logs.Add(logDTO);
                 }
             }

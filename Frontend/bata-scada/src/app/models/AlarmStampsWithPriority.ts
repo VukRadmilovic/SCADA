@@ -1,10 +1,11 @@
 import {AlarmType} from "./enums/AlarmType";
 
 export interface AlarmStampsWithPriority {
-  alarmId: number;
+  id: number;
   limit: number;
   value: number;
-  AlarmType: AlarmType;
+  tagName : string;
+  type: AlarmType;
   priority: number;
   timestamp: Date;
 }

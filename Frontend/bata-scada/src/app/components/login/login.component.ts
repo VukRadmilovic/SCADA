@@ -31,8 +31,12 @@ export class LoginComponent {
     }
     this.userService.login(credentials).subscribe( {
       next : () => {
-        sessionStorage.setItem("user",this.loginForm.value.username);
+        localStorage.setItem("user",this.loginForm.value.username);
+        const baseURL = "http://localhost:4200/"
         this.router.navigate(['dbManager']);
+        window.open(baseURL + "trending","_blank");
+        window.open(baseURL + "alarms","_blank");
+        window.open(baseURL + "report","_blank");
       },
       error: (err) => {
         for (let key in err.error.errors) {
