@@ -43,8 +43,8 @@ export class ReportManagerComponent implements OnInit{
   displayedColumns2: string[] = ['alarmId', 'limit', 'value', 'priority', 'timestamp'];
   displayedColumns6: string[] = ['address', 'value', 'timestamp'];
   dataSource = ELEMENT_DATA;
-  dataSource1 = ELEMENT_DATA1;
-  dataSource2 = new MatTableDataSource<TagValueWithTimestamp>();
+  dataSource1 = new MatTableDataSource<AlarmStampsWithPriority>();
+  dataSource2 = new MatTableDataSource<AlarmStampsWithPriority>();
   dataSource3 = new MatTableDataSource<TagValueWithTimestamp>();
   dataSource4 = new MatTableDataSource<TagValueWithTimestamp>();
   dataSource5 = new MatTableDataSource<TagValueWithTimestamp>();
@@ -52,6 +52,10 @@ export class ReportManagerComponent implements OnInit{
   addresses: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 
   range3 = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+  range1 = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   });
@@ -72,7 +76,7 @@ export class ReportManagerComponent implements OnInit{
         results.forEach(tag =>{
           this.dataSource6.data.push(tag);
         })
-        console.log(this.dataSource6);
+        console.log(this.dataSource6.data);
       },
       error: (err) => {
         console.log(err);
@@ -86,7 +90,7 @@ export class ReportManagerComponent implements OnInit{
         results.forEach(tag =>{
           this.dataSource5.data.push(tag);
         })
-        console.log(this.dataSource5);
+        console.log(this.dataSource5.data);
       },
       error: (err) => {
         console.log(err);
@@ -110,6 +114,26 @@ export class ReportManagerComponent implements OnInit{
         }
       }
     });
+  }
+
+  update1($event:any){
+    this.dataSource1.data = [];
+    if(this.range1.value.start != null && this.range1.value.end != null){
+      this.tagService.someTime(this.range1.value.start, this.range1.value.end).subscribe({
+        next: (results) => {
+          results.forEach(tag =>{
+            this.dataSource1.data.push(tag);
+          })
+          console.log(this.dataSource1.data);
+        },
+        error: (err) => {
+          console.log(err);
+          for (let key in err.error.errors) {
+            this.notificationService.createNotification(err.error.errors[key]);
+          }
+        }
+      });
+    }
   }
 
   update3($event:any){

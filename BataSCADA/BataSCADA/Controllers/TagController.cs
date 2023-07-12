@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Web;
 using System;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BataSCADA.Controllers
 {
@@ -210,29 +211,16 @@ namespace BataSCADA.Controllers
             return Ok(TagService.AnalogLast());
         }
 
-        /*[HttpGet("all-time/{timeFrom}/{timeTo}")]
+        [HttpGet("all-time/{timeFrom}/{timeTo}")]
         public IActionResult AllTime(string timeFrom, string timeTo)
         {
             try
             {
                 timeFrom = HttpUtility.UrlDecode(timeFrom);
                 timeTo = HttpUtility.UrlDecode(timeTo);
-                DateTime from = DateTime.Parse(timeFrom);
-                DateTime to = DateTime.Parse(timeTo);
-                return Ok(from.ToString() + to.ToString());
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new GlobalError(400, "Tag", ex.Message));
-            }
-        }*/
-
-        [HttpGet("all-time/")]
-        public IActionResult AllTime()
-        {
-            try
-            {
-                return Ok(TagService.AllTime(DateTime.Now, DateTime.Now));
+                DateTime from = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(timeFrom));
+                DateTime to = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(timeTo));
+                return Ok(TagService.AllTime(from, to));
             }
             catch (ArgumentException ex)
             {

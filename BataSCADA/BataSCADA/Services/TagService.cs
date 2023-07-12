@@ -302,7 +302,7 @@ namespace BataSCADA.Services
             {
                 foreach(InputTagDTO tag in tags)
                 {
-                    if(tag.Address == value.Address)
+                    if(tag.Address == value.Address && value.Timestamp > from && value.Timestamp < to)
                     {
                         DigitalWithTime temp = new DigitalWithTime();
                         temp.Address = value.Address;

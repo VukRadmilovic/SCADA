@@ -16,6 +16,7 @@ import {AlarmDTO} from "../models/AlarmDTO";
 import {TagValueWithoutNameDTO} from "../models/TagValueWithoutNameDTO";
 import {TagValueWithTimestamp} from "../models/TagValueWithTimestamp";
 import {FormControl, ɵValue} from "@angular/forms";
+import {AlarmStampsWithPriority} from "../models/AlarmStampsWithPriority";
 
 @Injectable({
   providedIn: 'root'
@@ -89,11 +90,14 @@ export class TagService {
   }
 
   public allTime(from: Date | null, to: Date | null): Observable<TagValueWithTimestamp[]>{
-    // return this.http.get<TagValueWithTimestamp[]>(this.prefix + "all-time/"+from?.toDateString()+"/"+to?.toDateString());
-    return this.http.get<TagValueWithTimestamp[]>(this.prefix + "all-time/");
+    return this.http.get<TagValueWithTimestamp[]>(this.prefix + "all-time/" + from?.getTime().toString() + "/" + to?.getTime().toString());
   }
 
-  public alarmWPriority(priority: string): Observable<TagValueWithTimestamp[]>{
-    return this.http.get<TagValueWithTimestamp[]>(environment.apiURL + "alarms/wpriority/" + priority);
+  public someTime(from: Date | null, to: Date | null): Observable<AlarmStampsWithPriority[]>{
+    return this.http.get<AlarmStampsWithPriority[]>(environment.apiURL + "alarms/some-time/" + from?.getTime().toString() + "/" + to?.getTime().toString());
+  }
+
+  public alarmWPriority(priority: string): Observable<AlarmStampsWithPriority[]>{
+    return this.http.get<AlarmStampsWithPriority[]>(environment.apiURL + "alarms/wpriority/" + priority);
   }
 }

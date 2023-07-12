@@ -41,6 +41,11 @@ namespace BataSCADA.Repositories
             using var dbContext = new DatabaseContext();
             return dbContext.Alarms.Where(alarm => alarm.Priority == priority).ToList();
         }
+        public static List<AlarmLog>? GetByTime(DateTime from, DateTime to)
+        {
+            using var dbContext = new DatabaseContext();
+            return dbContext.AlarmLogs.Where(alarm => alarm.Timestamp > from && alarm.Timestamp < to).ToList();
+        }
 
         public static void Delete(int id)
         {

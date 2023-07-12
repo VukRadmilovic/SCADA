@@ -61,5 +61,21 @@ namespace BataSCADA.Controllers
                 return BadRequest(new GlobalError(400, "Tag", ex.Message));
             }
         }
+        [HttpGet("some-time/{from}/{to}")]
+        public IActionResult SomeTime(string from, string to)
+        {
+            try
+            {
+                from = HttpUtility.UrlDecode(from);
+                to = HttpUtility.UrlDecode(to);
+                DateTime FromTime = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(from));
+                DateTime ToTime = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(to));
+                return Ok(AlarmService.SomeTime(FromTime, ToTime));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new GlobalError(400, "Tag", ex.Message));
+            }
+        }
     }
 }

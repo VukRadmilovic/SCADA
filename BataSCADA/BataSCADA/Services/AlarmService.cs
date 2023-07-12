@@ -94,22 +94,40 @@ namespace BataSCADA.Services
         internal static List<AlarmLogsDTO> WPriority(int priority)
         {
             var alarms = AlarmRepository.GetByPriority(priority);
-            List<AlarmLogsDTO > logs = new List<AlarmLogsDTO>();
-            List < AlarmLog > allLogs = AlarmRepository.GetLogs();
-            foreach(Alarm alarm in alarms)
+            List<AlarmLogsDTO> logs = new List<AlarmLogsDTO>();
+            List<AlarmLog> allLogs = AlarmRepository.GetLogs();
+            foreach (Alarm alarm in alarms)
             {
-                foreach(AlarmLog log in allLogs)
+                foreach (AlarmLog log in allLogs)
                 {
-                    if(log.Id == alarm.Id)
+                    if (log.Id == alarm.Id)
                     {
                         AlarmLogsDTO logDTO = new AlarmLogsDTO();
                         logDTO.Id = log.Id;
                         logDTO.Priority = priority;
-                        logDTO.Value = log.Limit;
+                        logDTO.Limit = log.Limit;
                         logDTO.Value = log.Value;
                         logDTO.Timestamp = log.Timestamp;
                         logDTO.Type = alarm.Type;
                     }
+                }
+            }
+            return logs;
+        }
+
+        internal static List<AlarmLogsDTO> SomeTime(DateTime from, DateTime to)
+        {
+            var alarms = AlarmRepository.GetByTime(from, to);
+            List<AlarmLogsDTO> logs = new List<AlarmLogsDTO>();
+            foreach (AlarmLog alarm in alarms)
+            {
+                if(alarm.Timestamp > from && alarm.Timestamp < to)
+                {
+                    AlarmLogsDTO logDTO = new AlarmLogsDTO();
+                    logDTO.Id = alarm.Id;
+                    logDTO.Limit = alarm.Limit;
+                    logDTO.Value = alarm.Value;
+                    logDTO.Timestamp = alarm.Timestamp;
                 }
             }
             return logs;

@@ -1,6 +1,17 @@
 <mat-tab-group>
   <mat-tab label="All alarms in time frame">
 <!--    TABLE 1     -->
+    <mat-form-field>
+      <mat-label>Enter a date range</mat-label>
+      <mat-date-range-input [formGroup]="range1" [rangePicker]="picker1">
+        <input matStartDate formControlName="start" placeholder="Start date">
+        <input matEndDate formControlName="end" placeholder="End date" (dateChange)="update1($event)">
+      </mat-date-range-input>
+      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker1></mat-date-range-picker>
+    </mat-form-field>
+
     <table mat-table [dataSource]="dataSource1" class="mat-elevation-z8" matSort >
       <ng-container matColumnDef="alarmId">
         <th mat-header-cell *matHeaderCellDef> Alarm Id </th>
@@ -75,13 +86,13 @@
 <!--  TABLE 3  -->
     <mat-form-field>
       <mat-label>Enter a date range</mat-label>
-      <mat-date-range-input [formGroup]="range3" [rangePicker]="picker">
+      <mat-date-range-input [formGroup]="range3" [rangePicker]="picker3">
         <input matStartDate formControlName="start" placeholder="Start date">
         <input matEndDate formControlName="end" placeholder="End date" (dateChange)="update3($event)">
       </mat-date-range-input>
       <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-date-range-picker #picker></mat-date-range-picker>
+      <mat-datepicker-toggle matIconSuffix [for]="picker3"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker3></mat-date-range-picker>
     </mat-form-field>
 
     <table mat-table [dataSource]="dataSource3" class="mat-elevation-z8" matSort >
