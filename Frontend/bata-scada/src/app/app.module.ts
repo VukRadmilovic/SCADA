@@ -28,6 +28,7 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import { InputTagsComponent } from './components/input-tags/input-tags.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { TrendingComponent } from './components/trending/trending.component';
+import { ReportManagerComponent } from './components/report-manager/report-manager.component';
 import { AlarmsComponent } from './components/alarms/alarms.component';
 
 @NgModule({
@@ -38,6 +39,8 @@ import { AlarmsComponent } from './components/alarms/alarms.component';
     NavigationComponent,
     InputTagsComponent,
     RegistrationComponent,
+    TrendingComponent,
+    ReportManagerComponent,
     AlarmsComponent,
     TrendingComponent,
   ],
