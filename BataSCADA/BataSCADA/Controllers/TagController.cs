@@ -183,5 +183,25 @@ namespace BataSCADA.Controllers
                 return BadRequest(new GlobalError(400, "Tag", ex.Message));
             }
         }
+
+        [HttpGet("tag-all-values/{tagName}")]
+        public IActionResult TagAllValues(string tagName)
+        {
+            try
+            {
+                tagName = HttpUtility.UrlDecode(tagName);
+                return Ok(TagService.TagAllValues(tagName));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new GlobalError(400, "Tag", ex.Message));
+            }
+        }
+
+        [HttpGet("digital-all-last")]
+        public IActionResult DigitalAllLast()
+        {
+            return Ok(TagService.DigitalLast());
+        }
     }
 }

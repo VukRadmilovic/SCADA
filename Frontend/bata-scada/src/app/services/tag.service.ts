@@ -13,6 +13,7 @@ import {DigitalInput} from "../models/DigitalInput";
 import {AnalogInputDTO} from "../models/AnalogInputDTO";
 import {Alarm} from "../models/Alarm";
 import {AlarmDTO} from "../models/AlarmDTO";
+import {TagValueWithoutNameDTO} from "../models/TagValueWithoutNameDTO";
 
 @Injectable({
   providedIn: 'root'
@@ -72,5 +73,8 @@ export class TagService {
 
   public tagLastValue(tagName : string): Observable<GlobalError | number> {
     return this.http.get<GlobalError | number>(this.prefix + "tag-last-value/" + tagName);
+  }
+  public tagAllValues(tagName : string): Observable<TagValueWithoutNameDTO[]>{
+    return this.http.get<TagValueWithoutNameDTO[]>(this.prefix + "tag-all-values/" + tagName);
   }
 }

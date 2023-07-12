@@ -198,5 +198,21 @@ namespace BataSCADA.Services
 
             return AddressValueRepository.GetLastValueByAddress(tag.Address).Value;
         }
+
+        internal static List<AddressValueWithTimeDTO> TagAllValues(string tagName)
+        {
+            /*var tag = TagRepository.GetTagByTagName(tagName);
+            if (tag == null)
+                throw new ArgumentException("Tag with the specified name does not exist!");
+            if (tag is DigitalOutput || tag is AnalogOutput)
+                throw new ArgumentException("Tag is not an input tag!");*/
+
+            return AddressValueRepository.GetAllValuesByAddress(int.Parse(tagName));
+        }
+
+        internal static object? DigitalLast()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
