@@ -14,6 +14,7 @@ import {AnalogInputDTO} from "../models/AnalogInputDTO";
 import {Alarm} from "../models/Alarm";
 import {AlarmDTO} from "../models/AlarmDTO";
 import {TagValueWithoutNameDTO} from "../models/TagValueWithoutNameDTO";
+import {TagValueWithTimestamp} from "../models/TagValueWithTimestamp";
 
 @Injectable({
   providedIn: 'root'
@@ -76,5 +77,13 @@ export class TagService {
   }
   public tagAllValues(tagName : string): Observable<TagValueWithoutNameDTO[]>{
     return this.http.get<TagValueWithoutNameDTO[]>(this.prefix + "tag-all-values/" + tagName);
+  }
+
+  public digitalAllValues(): Observable<TagValueWithTimestamp[]>{
+    return this.http.get<TagValueWithTimestamp[]>(this.prefix + "digital-all-last/");
+  }
+
+  public analogAllValues(): Observable<TagValueWithTimestamp[]>{
+    return this.http.get<TagValueWithTimestamp[]>(this.prefix + "analog-all-last/");
   }
 }

@@ -8,7 +8,7 @@ import {AlarmStampsWithPriority} from "../../models/AlarmStampsWithPriority";
 import {AlarmType} from "../../models/enums/AlarmType";
 import {TagValueWithoutNameDTO} from "../../models/TagValueWithoutNameDTO";
 import {TagType} from "../../models/enums/TagType";
-import {MatTable} from "@angular/material/table";
+import {MatTable, MatTableDataSource} from "@angular/material/table";
 
 const ELEMENT_DATA: TagValueWithTimestamp[] = [
   {tagName: 'test', address: 1, value: 1.0079, timestamp: new Date('2024-07-22')},
@@ -54,9 +54,9 @@ export class ReportManagerComponent implements OnInit{
   dataSource1 = ELEMENT_DATA1;
   dataSource2 = ELEMENT_DATA2;
   dataSource3 = ELEMENT_DATA;
-  dataSource4 = ELEMENT_DATA;
-  dataSource5 = ELEMENT_DATA;
-  dataSource6 : TagValueWithoutNameDTO[] = [];
+  dataSource4 = new MatTableDataSource<TagValueWithTimestamp>();
+  dataSource5 = new MatTableDataSource<TagValueWithTimestamp>();
+  dataSource6 = new MatTableDataSource<TagValueWithoutNameDTO>();
   addresses: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 
   constructor(private tagService: TagService,
@@ -65,10 +65,12 @@ export class ReportManagerComponent implements OnInit{
   }
 
   ngOnInit() {
+    this.dataSource6.data = [];
+    this.dataSource5.data = [];
     this.tagService.tagAllValues("1").subscribe({
       next: (results) => {
         results.forEach(tag =>{
-          this.dataSource6.push(tag);
+          this.dataSource6.data.push(tag);
         })
         console.log(this.dataSource6);
       },
@@ -78,7 +80,36 @@ export class ReportManagerComponent implements OnInit{
           this.notificationService.createNotification(err.error.errors[key]);
         }
       }
-    })
+    });
+    this.tagService.digitalAllValues().subscribe({
+      next: (results) => {
+        results.forEach(tag =>{
+          this.dataSource5.data.push(tag);
+        })
+        console.log(this.dataSource5);
+      },
+      error: (err) => {
+        console.log(err);
+        for (let key in err.error.errors) {
+          this.notificationService.createNotification(err.error.errors[key]);
+        }
+      }
+    });
+
+    this.tagService.analogAllValues().subscribe({
+      next: (results) => {
+        results.forEach(tag =>{
+          this.dataSource4.data.push(tag);
+        })
+        console.log(this.dataSource4);
+      },
+      error: (err) => {
+        console.log(err);
+        for (let key in err.error.errors) {
+          this.notificationService.createNotification(err.error.errors[key]);
+        }
+      }
+    });
   }
 
   onChange6(value: any) {

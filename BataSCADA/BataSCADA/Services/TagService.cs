@@ -1,5 +1,6 @@
 ﻿using BataSCADA.DTOs;
 using BataSCADA.Models;
+using BataSCADA.Models.Enumerations;
 using BataSCADA.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -210,9 +211,52 @@ namespace BataSCADA.Services
             return AddressValueRepository.GetAllValuesByAddress(int.Parse(tagName));
         }
 
-        internal static object? DigitalLast()
+        internal static List<DigitalWithTime> DigitalLast()
         {
-            throw new NotImplementedException();
+            List<InputTagDTO> tags = GetAllInputTags();
+            List<AddressValueWithTimeDTO> values = AddressValueRepository.GetAllValues();
+            List<DigitalWithTime> ret = new List<DigitalWithTime >();
+            foreach (AddressValueWithTimeDTO value in values)
+            {
+                foreach(InputTagDTO tag in tags)
+                {
+                    if(tag.Type != TagType.Digital) continue;
+                    if(tag.Address == value.Address)
+                    {
+                        DigitalWithTime temp = new DigitalWithTime();
+                        temp.Address = value.Address;
+                        temp.TagName = tag.TagName;
+                        temp.Value = value.Value;
+                        temp.Timestamp = value.Timestamp;
+                        ret.Add(temp);
+                    }
+                }
+            }
+            return ret;
+        }
+
+        internal static object? AnalogLast()
+        {
+            List<InputTagDTO> tags = GetAllInputTags();
+            List<AddressValueWithTimeDTO> values = AddressValueRepository.GetAllValues();
+            List<DigitalWithTime> ret = new List<DigitalWithTime>();
+            foreach (AddressValueWithTimeDTO value in values)
+            {
+                foreach (InputTagDTO tag in tags)
+                {
+                    if (tag.Type != TagType.Analog) continue;
+                    if (tag.Address == value.Address)
+                    {
+                        DigitalWithTime temp = new DigitalWithTime();
+                        temp.Address = value.Address;
+                        temp.TagName = tag.TagName;
+                        temp.Value = value.Value;
+                        temp.Timestamp = value.Timestamp;
+                        ret.Add(temp);
+                    }
+                }
+            }
+            return ret;
         }
     }
 }

@@ -203,5 +203,11 @@ namespace BataSCADA.Controllers
         {
             return Ok(TagService.DigitalLast());
         }
+
+        [HttpGet("analog-all-last")]
+        public IActionResult DigitalAllValues()
+        {
+            return Ok(TagService.AnalogLast());
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using BataSCADA.DTOs;
 using BataSCADA.Models;
 using BataSCADA.Utils;
+using System.Net;
 
 namespace BataSCADA.Repositories
 {
@@ -37,6 +38,24 @@ namespace BataSCADA.Repositories
                     temp.Timestamp = value.Timestamp;
                     values2.Add(temp);
                 }
+            }
+            return values2;
+        }
+
+        internal static List<AddressValueWithTimeDTO> GetAllValues()
+        {
+            using var dbContext = new DatabaseContext();
+            List<AddressValue> values = new List<AddressValue>();
+            List<AddressValueWithTimeDTO> values2 = new List<AddressValueWithTimeDTO>();
+            values.AddRange(dbContext.AddressValues.OrderByDescending(value => value.Timestamp));
+            foreach (AddressValue value in values)
+            {
+                    AddressValueWithTimeDTO temp = new AddressValueWithTimeDTO();
+                    temp.Address = value.Address;
+                    temp.ValueType = value.ValueType;
+                    temp.Value = value.Value;
+                    temp.Timestamp = value.Timestamp;
+                    values2.Add(temp);
             }
             return values2;
         }
