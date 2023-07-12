@@ -196,8 +196,23 @@ namespace BataSCADA.Services
                 throw new ArgumentException("Tag with the specified name does not exist!");
             if (tag is DigitalOutput || tag is AnalogOutput)
                 throw new ArgumentException("Tag is not an input tag!");
-
-            return AddressValueRepository.GetLastValueByAddress(tag.Address).Value;
+            if (tag is DigitalInput)
+            {
+                if (((DigitalInput)tag).Driver == DriverType.Simulation)
+                {
+                    return ScanInputTag(tag.TagName);
+                }
+                return AddressValueRepository.GetLastValueByAddress(tag.Address).Value;
+            }
+            if (tag is AnalogInput)
+            {
+                if (((AnalogInput)tag).Driver == DriverType.Simulation)
+                {
+                    return ScanInputTag(tag.TagName);
+                }
+                return AddressValueRepository.GetLastValueByAddress(tag.Address).Value;
+            }
+            return 0.0;
         }
 
         internal static List<AddressValueWithTimeDTO> TagAllValues(string tagName)
@@ -211,12 +226,38 @@ namespace BataSCADA.Services
             return AddressValueRepository.GetAllValuesByAddress(int.Parse(tagName));
         }
 
+        internal static DigitalWithTime TagLastValueWithTime(string tagName)
+        {
+            var tag = TagRepository.GetTagByTagName(tagName);
+            if (tag == null)
+                throw new ArgumentException("Tag with the specified name does not exist!");
+            if (tag is DigitalOutput || tag is AnalogOutput)
+                throw new ArgumentException("Tag is not an input tag!");
+            DigitalWithTime value = new DigitalWithTime();
+            
+            AddressValue addressValue = AddressValueRepository.GetLastValueByAddress(tag.Address);
+            DigitalWithTime ret = new DigitalWithTime();
+            ret.Value = addressValue.Value;
+            ret.Timestamp = addressValue.Timestamp;
+            return ret;
+        }
+
         internal static List<DigitalWithTime> DigitalLast()
         {
             List<InputTagDTO> tags = GetAllInputTags();
-            List<AddressValueWithTimeDTO> values = AddressValueRepository.GetAllValues();
             List<DigitalWithTime> ret = new List<DigitalWithTime >();
-            foreach (AddressValueWithTimeDTO value in values)
+            foreach (InputTagDTO tag in tags)
+            {
+                if(tag.Type == TagType.Digital)
+                {
+                    DigitalWithTime temp = TagLastValueWithTime(tag.TagName);
+                    temp.TagName = tag.TagName;
+                    temp.Address = tag.Address;
+                    ret.Add(temp);
+                }
+            }
+            return ret;
+            /*foreach (AddressValueWithTimeDTO value in values)
             {
                 foreach(InputTagDTO tag in tags)
                 {
@@ -232,31 +273,29 @@ namespace BataSCADA.Services
                     }
                 }
             }
-            return ret;
+            return ret;*/
         }
 
         internal static object? AnalogLast()
         {
             List<InputTagDTO> tags = GetAllInputTags();
-            List<AddressValueWithTimeDTO> values = AddressValueRepository.GetAllValues();
             List<DigitalWithTime> ret = new List<DigitalWithTime>();
-            foreach (AddressValueWithTimeDTO value in values)
+            foreach (InputTagDTO tag in tags)
             {
-                foreach (InputTagDTO tag in tags)
+                if (tag.Type == TagType.Analog)
                 {
-                    if (tag.Type != TagType.Analog) continue;
-                    if (tag.Address == value.Address)
-                    {
-                        DigitalWithTime temp = new DigitalWithTime();
-                        temp.Address = value.Address;
-                        temp.TagName = tag.TagName;
-                        temp.Value = value.Value;
-                        temp.Timestamp = value.Timestamp;
-                        ret.Add(temp);
-                    }
+                    DigitalWithTime temp = TagLastValueWithTime(tag.TagName);
+                    temp.TagName = tag.TagName;
+                    temp.Address = tag.Address;
+                    ret.Add(temp);
                 }
             }
             return ret;
+        }
+
+        internal static object? AllTime(DateTime from, DateTime to)
+        {
+            throw new NotImplementedException();
         }
     }
 }
