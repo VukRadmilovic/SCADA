@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Web;
 using System;
+using BataSCADA.Models.Enumerations;
 
 namespace BataSCADA.Controllers
 {
@@ -45,6 +46,19 @@ namespace BataSCADA.Controllers
             catch (ArgumentException ex)
             {
                 return BadRequest(new GlobalError(400, "Snooze", ex.Message));
+            }
+        }
+        [HttpGet("wpriority/{priority}")]
+        public IActionResult WPriority(string priority)
+        {
+            try
+            {
+                priority = HttpUtility.UrlDecode(priority);
+                return Ok(AlarmService.WPriority(int.Parse(priority)));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new GlobalError(400, "Tag", ex.Message));
             }
         }
     }

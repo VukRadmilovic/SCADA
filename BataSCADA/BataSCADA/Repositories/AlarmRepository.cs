@@ -36,6 +36,12 @@ namespace BataSCADA.Repositories
             return dbContext.Alarms.Any(alarm => alarm.Id == id) ? dbContext.Alarms.FirstOrDefault(alarm => alarm.Id == id) : null;
         }
 
+        public static List<Alarm>? GetByPriority(int priority)
+        {
+            using var dbContext = new DatabaseContext();
+            return dbContext.Alarms.Where(alarm => alarm.Priority == priority).ToList();
+        }
+
         public static void Delete(int id)
         {
             var alarm = GetById(id);
@@ -49,6 +55,13 @@ namespace BataSCADA.Repositories
             using var dbContext = new DatabaseContext();
             return dbContext.Alarms
                 .Where(a => a.Triggered && (a.SnoozedUntil == null || a.SnoozedUntil <= DateTime.Now)).ToList();
+        }
+
+        public static List<AlarmLog>? GetLogs()
+        {
+            using var dbContext = new DatabaseContext();
+            return dbContext.AlarmLogs.ToList();
+
         }
     }
 }

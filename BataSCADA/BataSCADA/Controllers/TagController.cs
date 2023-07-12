@@ -210,7 +210,7 @@ namespace BataSCADA.Controllers
             return Ok(TagService.AnalogLast());
         }
 
-        [HttpGet("all-time/{timeFrom}/{timeTo}")]
+        /*[HttpGet("all-time/{timeFrom}/{timeTo}")]
         public IActionResult AllTime(string timeFrom, string timeTo)
         {
             try
@@ -219,7 +219,20 @@ namespace BataSCADA.Controllers
                 timeTo = HttpUtility.UrlDecode(timeTo);
                 DateTime from = DateTime.Parse(timeFrom);
                 DateTime to = DateTime.Parse(timeTo);
-                return Ok(TagService.AllTime(from, to));
+                return Ok(from.ToString() + to.ToString());
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new GlobalError(400, "Tag", ex.Message));
+            }
+        }*/
+
+        [HttpGet("all-time/")]
+        public IActionResult AllTime()
+        {
+            try
+            {
+                return Ok(TagService.AllTime(DateTime.Now, DateTime.Now));
             }
             catch (ArgumentException ex)
             {

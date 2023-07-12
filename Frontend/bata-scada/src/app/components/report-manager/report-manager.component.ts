@@ -1,14 +1,14 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {TagService} from "../../services/tag.service";
 import {NotificationsService} from "../../services/notifications.service";
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {TagValueWithTimestamp} from "../../models/TagValueWithTimestamp";
 import {AlarmStamps} from "../../models/AlarmStamps"
 import {AlarmStampsWithPriority} from "../../models/AlarmStampsWithPriority";
 import {AlarmType} from "../../models/enums/AlarmType";
 import {TagValueWithoutNameDTO} from "../../models/TagValueWithoutNameDTO";
 import {TagType} from "../../models/enums/TagType";
-import {MatTable, MatTableDataSource} from "@angular/material/table";
+import {MatTableDataSource} from "@angular/material/table";
 
 const ELEMENT_DATA: TagValueWithTimestamp[] = [
   {tagName: 'test', address: 1, value: 1.0079, timestamp: new Date('2024-07-22')},
@@ -16,14 +16,6 @@ const ELEMENT_DATA: TagValueWithTimestamp[] = [
   {tagName: 'test', address: 1, value: 1.0079, timestamp: new Date('2024-07-26')},
   {tagName: 'test', address: 1, value: 1.0079, timestamp: new Date('2024-07-27')},
   {tagName: 'test', address: 1, value: 1.0079, timestamp: new Date('2024-07-28')},
-];
-
-const ELEMENT_DATA6: TagValueWithoutNameDTO[] = [
-  {address: 5, value: 1.0079, valueType: TagType.Analog, timestamp: new Date('2024-07-22')},
-  {address: 5, value: 1.0079, valueType: TagType.Analog, timestamp: new Date('2024-07-22')},
-  {address: 5, value: 1.0079, valueType: TagType.Analog, timestamp: new Date('2024-07-22')},
-  {address: 5, value: 1.0079, valueType: TagType.Analog, timestamp: new Date('2024-07-22')},
-  {address: 5, value: 1.0079, valueType: TagType.Analog, timestamp: new Date('2024-07-22')},
 ];
 
 const ELEMENT_DATA1: AlarmStamps[] =[
@@ -34,10 +26,10 @@ const ELEMENT_DATA1: AlarmStamps[] =[
 ]
 
 const ELEMENT_DATA2: AlarmStampsWithPriority[] =[
-  {alarmId: 1, limit: 100, value:110, timestamp: new Date('2024-07-22'), priority: AlarmType.High},
-  {alarmId: 1, limit: 100, value:110, timestamp: new Date('2024-07-22'), priority: AlarmType.High},
-  {alarmId: 1, limit: 100, value:110, timestamp: new Date('2024-07-22'), priority: AlarmType.High},
-  {alarmId: 1, limit: 100, value:110, timestamp: new Date('2024-07-22'), priority: AlarmType.High}
+  {alarmId: 1, limit: 100, value:110, timestamp: new Date('2024-07-22'), priority: 1, AlarmType: AlarmType.High},
+  {alarmId: 1, limit: 100, value:110, timestamp: new Date('2024-07-22'), priority: 3, AlarmType: AlarmType.High},
+  {alarmId: 1, limit: 100, value:110, timestamp: new Date('2024-07-22'), priority: 2, AlarmType: AlarmType.High},
+  {alarmId: 1, limit: 100, value:110, timestamp: new Date('2024-07-22'), priority: 1, AlarmType: AlarmType.High}
 ]
 
 @Component({
@@ -52,12 +44,20 @@ export class ReportManagerComponent implements OnInit{
   displayedColumns6: string[] = ['address', 'value', 'timestamp'];
   dataSource = ELEMENT_DATA;
   dataSource1 = ELEMENT_DATA1;
-  dataSource2 = ELEMENT_DATA2;
-  dataSource3 = ELEMENT_DATA;
+  dataSource2 = new MatTableDataSource<TagValueWithTimestamp>();
+  dataSource3 = new MatTableDataSource<TagValueWithTimestamp>();
   dataSource4 = new MatTableDataSource<TagValueWithTimestamp>();
   dataSource5 = new MatTableDataSource<TagValueWithTimestamp>();
   dataSource6 = new MatTableDataSource<TagValueWithoutNameDTO>();
   addresses: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+
+  range3 = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+  selected6: number = 1;
+  priorities: string[] = ["1", "2", "3"];
+  selected2: string = "1";
 
   constructor(private tagService: TagService,
               private notificationService: NotificationsService,
@@ -112,7 +112,59 @@ export class ReportManagerComponent implements OnInit{
     });
   }
 
-  onChange6(value: any) {
-    console.log(value.target.value);
+  update3($event:any){
+    this.dataSource3.data = [];
+    if(this.range3.value.start != null && this.range3.value.end != null){
+      this.tagService.allTime(this.range3.value.start, this.range3.value.end).subscribe({
+        next: (results) => {
+          results.forEach(tag =>{
+            this.dataSource3.data.push(tag);
+          })
+          console.log(this.dataSource3.data);
+        },
+        error: (err) => {
+          console.log(err);
+          for (let key in err.error.errors) {
+            this.notificationService.createNotification(err.error.errors[key]);
+          }
+        }
+      });
+    }
+  }
+
+  update2($event: any){
+    this.dataSource2.data = [];
+    this.tagService.alarmWPriority(this.selected2).subscribe({
+      next: (results) => {
+        results.forEach(tag =>{
+          this.dataSource2.data.push(tag);
+        })
+        console.log(this.dataSource2.data);
+      },
+      error: (err) => {
+        console.log(err);
+        for (let key in err.error.errors) {
+          this.notificationService.createNotification(err.error.errors[key]);
+        }
+      }
+    });
+  }
+
+  update6($event: any) {
+    this.dataSource6.data = [];
+    this.tagService.tagAllValues(this.selected6.toString()).subscribe({
+      next: (results) => {
+        results.forEach(tag =>{
+          this.dataSource6.data.push(tag);
+        })
+        console.log(this.dataSource6.data);
+      },
+      error: (err) => {
+        console.log(err);
+        for (let key in err.error.errors) {
+          this.notificationService.createNotification(err.error.errors[key]);
+        }
+      }
+    });
   }
 }

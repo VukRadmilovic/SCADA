@@ -293,9 +293,27 @@ namespace BataSCADA.Services
             return ret;
         }
 
-        internal static object? AllTime(DateTime from, DateTime to)
+        internal static List<DigitalWithTime> AllTime(DateTime from, DateTime to)
         {
-            throw new NotImplementedException();
+            List<InputTagDTO> tags = GetAllInputTags();
+            List<AddressValueWithTimeDTO> values = AddressValueRepository.GetAllValues();
+            List<DigitalWithTime> ret = new List<DigitalWithTime>();
+            foreach (AddressValueWithTimeDTO value in values)
+            {
+                foreach(InputTagDTO tag in tags)
+                {
+                    if(tag.Address == value.Address)
+                    {
+                        DigitalWithTime temp = new DigitalWithTime();
+                        temp.Address = value.Address;
+                        temp.TagName = tag.TagName;
+                        temp.Value = value.Value;
+                        temp.Timestamp = value.Timestamp;
+                        ret.Add(temp);
+                    }
+                }
+            }
+            return ret;
         }
     }
 }

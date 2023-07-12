@@ -90,5 +90,29 @@ namespace BataSCADA.Services
             alarm.SnoozedUntil = DateTime.Now.AddSeconds(snoozeLength);
             AlarmRepository.Update(alarm, false);
         }
+
+        internal static List<AlarmLogsDTO> WPriority(int priority)
+        {
+            var alarms = AlarmRepository.GetByPriority(priority);
+            List<AlarmLogsDTO > logs = new List<AlarmLogsDTO>();
+            List < AlarmLog > allLogs = AlarmRepository.GetLogs();
+            foreach(Alarm alarm in alarms)
+            {
+                foreach(AlarmLog log in allLogs)
+                {
+                    if(log.Id == alarm.Id)
+                    {
+                        AlarmLogsDTO logDTO = new AlarmLogsDTO();
+                        logDTO.Id = log.Id;
+                        logDTO.Priority = priority;
+                        logDTO.Value = log.Limit;
+                        logDTO.Value = log.Value;
+                        logDTO.Timestamp = log.Timestamp;
+                        logDTO.Type = alarm.Type;
+                    }
+                }
+            }
+            return logs;
+        }
     }
 }

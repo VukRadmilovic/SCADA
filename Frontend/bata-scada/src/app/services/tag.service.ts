@@ -15,6 +15,7 @@ import {Alarm} from "../models/Alarm";
 import {AlarmDTO} from "../models/AlarmDTO";
 import {TagValueWithoutNameDTO} from "../models/TagValueWithoutNameDTO";
 import {TagValueWithTimestamp} from "../models/TagValueWithTimestamp";
+import {FormControl, ɵValue} from "@angular/forms";
 
 @Injectable({
   providedIn: 'root'
@@ -85,5 +86,14 @@ export class TagService {
 
   public analogAllValues(): Observable<TagValueWithTimestamp[]>{
     return this.http.get<TagValueWithTimestamp[]>(this.prefix + "analog-all-last/");
+  }
+
+  public allTime(from: Date | null, to: Date | null): Observable<TagValueWithTimestamp[]>{
+    // return this.http.get<TagValueWithTimestamp[]>(this.prefix + "all-time/"+from?.toDateString()+"/"+to?.toDateString());
+    return this.http.get<TagValueWithTimestamp[]>(this.prefix + "all-time/");
+  }
+
+  public alarmWPriority(priority: string): Observable<TagValueWithTimestamp[]>{
+    return this.http.get<TagValueWithTimestamp[]>(environment.apiURL + "alarms/wpriority/" + priority);
   }
 }

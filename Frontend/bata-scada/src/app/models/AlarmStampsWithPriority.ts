@@ -4,6 +4,7 @@ export interface AlarmStampsWithPriority {
   alarmId: number;
   limit: number;
   value: number;
-  priority: AlarmType;
+  AlarmType: AlarmType;
+  priority: number;
   timestamp: Date;
 }
