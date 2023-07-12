@@ -234,12 +234,36 @@ namespace BataSCADA.Services
             if (tag is DigitalOutput || tag is AnalogOutput)
                 throw new ArgumentException("Tag is not an input tag!");
             DigitalWithTime value = new DigitalWithTime();
-            
-            AddressValue addressValue = AddressValueRepository.GetLastValueByAddress(tag.Address);
-            DigitalWithTime ret = new DigitalWithTime();
-            ret.Value = addressValue.Value;
-            ret.Timestamp = addressValue.Timestamp;
-            return ret;
+            if (tag is DigitalInput)
+            {
+                if (((DigitalInput)tag).Driver == DriverType.Simulation)
+                {
+                    value.Value = ScanInputTag(tag.TagName);
+                    value.Timestamp = DateTime.Now;
+                }
+                else
+                {
+                    AddressValue addressValue = AddressValueRepository.GetLastValueByAddress(tag.Address);
+                    DigitalWithTime ret = new DigitalWithTime();
+                    ret.Value = addressValue.Value;
+                    ret.Timestamp = addressValue.Timestamp;
+                }
+            }
+            if (tag is AnalogInput)
+            {
+                if (((AnalogInput)tag).Driver == DriverType.Simulation)
+                {
+                    value.Value = ScanInputTag(tag.TagName);
+                    value.Timestamp = DateTime.Now;
+                }
+                else
+                {
+                    AddressValue addressValue = AddressValueRepository.GetLastValueByAddress(tag.Address);
+                    value.Value = addressValue.Value;
+                    value.Timestamp = addressValue.Timestamp;
+                }
+            }
+            return value;
         }
 
         internal static List<DigitalWithTime> DigitalLast()
