@@ -3,6 +3,7 @@ using BataSCADA.Models;
 using BataSCADA.Models.Enumerations;
 using BataSCADA.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design.Internal;
 
 namespace BataSCADA.Services
 {
@@ -49,9 +50,20 @@ namespace BataSCADA.Services
 
         public static void DeleteTag(string tagName)
         {
-            if (TagRepository.GetTagByTagName(tagName) == null)
+            Tag tag = TagRepository.GetTagByTagName(tagName);
+            if (tag == null)
                 throw new ArgumentException("Tag with the specified name does not exist!");
             TagRepository.Delete(tagName);
+            if (tag is AnalogInput)
+            {
+                List<Alarm> alarmList = AlarmRepository.GetByTagName(tag.TagName);
+                foreach (var alarm in alarmList)
+                {
+                    AlarmRepository.Delete(alarm.Id);
+                    AlarmLogsRepository.Delete(alarm.Id);
+                }
+                AddressValueRepository.Delete(tag.Address);
+            }
         }
 
         public static void TurnOnTag(string tagName)

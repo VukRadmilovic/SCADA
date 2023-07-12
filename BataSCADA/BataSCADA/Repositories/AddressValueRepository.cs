@@ -1,6 +1,7 @@
 ﻿using BataSCADA.DTOs;
 using BataSCADA.Models;
 using BataSCADA.Utils;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace BataSCADA.Repositories
@@ -20,6 +21,18 @@ namespace BataSCADA.Repositories
             var value = dbContext.AddressValues.OrderByDescending(value => value.Timestamp)
                 .FirstOrDefault(value => value.Address == address);
             return value;
+        }
+
+        public static void Delete(int address)
+        {
+            using var dbContext = new DatabaseContext();
+            var values = dbContext.AddressValues.Where(x => x.Address == address);
+            foreach (var value in values)
+            {
+                dbContext.Entry(value).State = EntityState.Deleted;
+            }
+
+            dbContext.SaveChanges();
         }
 
         internal static List<AddressValueWithTimeDTO> GetAllValuesByAddress(int address)

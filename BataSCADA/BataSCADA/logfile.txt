@@ -25,3 +25,11 @@
 11.7.2023. 18:46:52 - Alarm triggered: TagName=analog1, AlarmId=5, Value=20, Limit=18
 11.7.2023. 18:46:54 - Alarm reset: TagName=analog1, AlarmId=1, Value=17, Limit=18
 11.7.2023. 18:46:54 - Alarm reset: TagName=analog1, AlarmId=5, Value=17, Limit=18
+7/12/2023 4:31:03 PM - Alarm triggered: TagName=Temeperatura, AlarmId=2, Value=193, Limit=190
+7/12/2023 4:31:05 PM - Alarm reset: TagName=Temeperatura, AlarmId=2, Value=123, Limit=190
+7/12/2023 4:31:15 PM - Alarm triggered: TagName=Temeperatura, AlarmId=2, Value=194, Limit=190
+7/12/2023 4:31:17 PM - Alarm reset: TagName=Temeperatura, AlarmId=2, Value=138, Limit=190
+7/12/2023 4:35:48 PM - Alarm triggered: TagName=Temperatura, AlarmId=3, Value=200, Limit=190
+7/12/2023 4:35:50 PM - Alarm reset: TagName=Temperatura, AlarmId=3, Value=146, Limit=190
+7/12/2023 4:36:07 PM - Alarm triggered: TagName=Temperatura, AlarmId=3, Value=200, Limit=190
+7/12/2023 4:36:09 PM - Alarm reset: TagName=Temperatura, AlarmId=3, Value=137, Limit=190
