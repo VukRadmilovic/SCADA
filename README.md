@@ -11,7 +11,7 @@
 
 ## Description
 
-This project is a SCADA (Supervisory Control and Data Acquisition) system implementation. It allows users to add and remove analog and digital tags, manage alarms, register users and perform real-time monitoring and control of the system.
+This project is a SCADA (Supervisory Control and Data Acquisition) system implementation. It allows users to add and remove analog and digital tags, manage alarms, register users and perform real-time monitoring and control of the system. The focus of the application is on efficient control of the system.
 
 The system architecture consists of the following components:
 
