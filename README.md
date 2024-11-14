@@ -56,7 +56,7 @@ Update-Database
 1. Navigate to the frontend directory:
 
 ```
-cd SCADA/Frontend/bata-scada
+cd SCADA/frontend/scada
 ```
 
 2. Install dependencies:

@@ -1,0 +1,14 @@
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<nav>
+  <div class="nav-wrapper">
+    <a routerLink="/user-main" class="brand-logo center">SCADA</a>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <li><a routerLink="/dbManager">Outputs</a></li>
+      <li><a routerLink="/dbManagerInput">Inputs</a></li>
+      <li><a routerLink="/dbManagerUsers">Users</a></li>
+      <li><a (click)="logout()">Logout</a></li>
+    </ul>
+  </div>
+</nav>
